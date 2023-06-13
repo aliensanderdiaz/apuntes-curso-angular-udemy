@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sección 4 de 29</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+</head>
+
+<body>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col">
+                <h1>Sección 4 de 29 - Angular</h1>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="list-group">
+                    <a href="./index.html" class="list-group-item list-group-item-action">
+                        Volver
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <section class="container">
+        <h3>30. Introducción a la sección</h3>
+    </section>
+    <hr>
+    <section class="container">
+        <h3>31. Temas puntuales de la sección</h3>
+    </section>
+    <hr>
+    <section class="container">
+        <h3>32. Exposición sobre Angular</h3>
+    </section>
+    <hr>
+    <section class="container">
+        <h3>33. Nuestro primer proyecto en Angular</h3>
+        <pre class="prettyprint">
+
+            > ng version
+            > ng new bases
+        </pre>
+        <p>
+            Por ahora no elijamos que queremos rutas, para aprender a hacerlar.
+            <br>
+            Y elegir css para estilos, solo por si no tenemos idea de los preprocesadores css.
+        </p>
+        <pre class="prettyprint">
+
+            > mv bases 02-bases
+            > cd 02-bases
+            > code .
+            > ng serve
+            ctrl + c
+        </pre>
+
+        <pre class="prettyprint">
+
+            // package.json
+
+            "start": "ng serve -o",
+        </pre>
+
+        <pre class="prettyprint">
+
+            > npm start
+        </pre>
+    </section>
+    <hr>
+    <section class="container">
+        <h3>34. Explicación de cada archivo del proyecto</h3>
+    </section>
+    <hr>
+    <section class="container">
+        <h3>35. Explicación de cada archivo - Parte 2</h3>
+    </section>
+    <hr>
+    <section class="container">
+        <h3>36. App Component</h3>
+        <pre class="prettyprint">
+
+            // app.component.html
+
+            &lth1>Hola Mundo&lt/h1>
+            &lthr>
+            &ltp>
+              Bienvenidos a Angular
+            &lt/p>
+        </pre>
+
+        <pre class="prettyprint">
+
+            // app.component.ts
+            
+            title = 'Mi primera app en angular';
+
+            // app.component.html
+
+            &lth1>{{ title }}&lt/h1>
+        </pre>
+    </section>
+    <hr>
+    <section class="container">
+        <h3>37. Contador</h3>
+        <pre class="prettyprint">
+
+            // app.component.ts
+
+            public counter: number = 10;
+
+            increaseBy( value: number ): void {
+              this.counter += value;
+            }
+          
+            resetCounter(): void {
+              this.counter = 10;
+            }
+
+            // app.component.html
+
+            &ltp>Counter: {{ counter }}&lt/p>
+            &ltbutton (click)="increaseBy( 1 )">+1&lt/button>
+            &ltbutton (click)="resetCounter()">Reset&lt/button>
+            &ltbutton (click)="increaseBy( -1 )">-1&lt/button>
+        </pre>
+    </section>
+    <hr>
+    <section class="container">
+        <h3>38. Contador Component</h3>
+        <pre class="prettyprint">
+
+            // app/counter/counter.component.ts
+
+            import { Component } from "@angular/core";
+
+            @Component({
+                selector: 'app-counter',
+                template: '&lth1>Counter&lt/h1>'
+            })
+            export class CounterComponent {}
+
+            // app.module.ts
+
+            declarations: [
+                AppComponent,
+                CounterComponent
+            ],
+        </pre>
+    </section>
+    <hr>
+
+    <section class="container">
+        <h3>39. Funcionalidad del Contador</h3>
+        <pre class="prettyprint">
+
+            // counter.component.ts
+
+            import { Component } from "@angular/core";
+
+            @Component({
+                selector: 'app-counter',
+                template: `
+                    &ltp>Counter: {{ counter }}&lt/p>
+                    &ltbutton (click)="increaseBy( -1 )">-1&lt/button>
+                    &ltbutton (click)="resetCounter()">Reset&lt/button>
+                    &ltbutton (click)="increaseBy( 1 )">+1&lt/button>
+                `
+            })
+            export class CounterComponent {
+            
+                public counter: number = 10;
+            
+                increaseBy( value: number ): void {
+                  this.counter += value;
+                }
+              
+                resetCounter(): void {
+                  this.counter = 10;
+                }
+            
+            }
+        </pre>
+    </section>
+    <hr>
+
+    <section class="container">
+        <h3>40. Componente Hero y directorios</h3>
+        <pre class="prettyprint">
+
+            > ng g c heroes/hero
+            > ng g c heroes/list
+        </pre>
+
+        <pre class="prettyprint">
+
+            // hero.component.ts
+            selector: 'app-heroes-hero',
+
+            // list.component.ts
+            selector: 'app-heroes-list',
+
+            // app.component.html
+            &ltapp-heroes-hero>&lt/app-heroes-hero>
+            &ltapp-heroes-list>&lt/app-heroes-list>
+        </pre>
+    </section>
+    <hr>
+
+    <section class="container">
+        <h3>41. Interpolación, estructura HTML y estilos</h3>
+        <pre class="prettyprint">
+
+            // index.html
+            &ltlink href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+
+            ...
+
+            &ltbody class="container pt-2">
+                &ltapp-root>&lt/app-root>
+            &lt/body>
+        </pre>
+
+        <p>Con esto agregamos los estilos de bootstrap a nuestra app.
+            <br>
+            NOTA: Es necesario parar la ejecución de la app, y volver a correr.
+        </p>
+
+        <pre class="prettyprint">
+
+            // hero.component.css
+
+            h1 {
+                font-size: 50px;
+            }
+            
+            dd {
+                font-size: 2rem;
+                font-weight: bold;
+            }
+
+            // hero.component.ts
+
+            public name: string = 'ironman'
+            public age: number  = 50
+
+            // hero.component.html
+
+            &lth1>{{ name }}&lt/h1>
+
+            &ltdl>
+                &lttd>Nombre: &lt/td>
+                &ltdd>{{ name }}&lt/dd>
+            
+                &lttd>Edad: &lt/td>
+                &ltdd>{{ age }}&lt/dd>
+            
+                &lttd>Método: &lt/td>
+                &ltdd>Algún Método&lt/dd>
+            
+                &lttd>Capitalizado: &lt/td>
+                &ltdd>Nombre Capitalizado&lt/dd>
+            &lt/dl>
+            
+            &ltbutton class="btn btn-primary mx-2">
+                Cambiar Nombre
+            &lt/button>
+            
+            &ltbutton class="btn btn-primary">
+                Cambiar Edad
+            &lt/button>
+        </pre>
+    </section>
+    <hr>
+
+    <section class="container">
+        <h3>42. One way data binding - enlazado en una sola vía</h3>
+        <pre class="prettyprint">
+
+            // hero.component.ts
+
+            get capitalizedName(): string {
+                return this.name.toUpperCase()
+            }
+
+            getHeroDescription(): string {
+                return `${ this.name } - ${ this.age }`
+            }
+
+            // hero.component.html
+
+            &lth1>{{ name }}&lt/h1>
+
+            &ltdl>
+                &lttd>Nombre: &lt/td>
+                &ltdd>{{ name }}&lt/dd>
+            
+                &lttd>Edad: &lt/td>
+                &ltdd>{{ age }}&lt/dd>
+            
+                &lttd>Método: &lt/td>
+                &ltdd>{{ getHeroDescription() }}&lt/dd>
+            
+                &lttd>Capitalizado: &lt/td>
+                &ltdd>{{ capitalizedName }}&lt/dd>
+            &lt/dl>
+        </pre>
+    </section>
+    <hr>
+
+    <section class="container">
+        <h3>43 de 404 - Tarea - Cambiar nombre y edad</h3>
+        <pre class="prettyprint">
+
+            // hero.component.ts
+
+            changeHero(): void {
+                this.name = 'spiderman';
+            }
+        
+            changeAge(): void {
+                this.age = 25;
+            }
+
+            // hero.component.html
+
+            &ltbutton class="btn btn-primary mx-2" (click)="changeHero()">
+                Cambiar Nombre
+            &lt/button>
+            
+            &ltbutton class="btn btn-primary" (click)="changeAge()">
+                Cambiar Edad
+            &lt/button>
+        </pre>
+    </section>
+    <hr>
+
+    <section class="container">
+        <h3>44 de 404 - Directiva *ngIf</h3>
+        <pre class="prettyprint">
+
+            // hero.component.ts
+            reset(): void {
+                this.name = 'ironman'
+                this.age = 50
+            
+                // document.querySelectorAll('h1')!.forEach(element => {
+                //   element.innerHTML = 'Desde Angular'
+                // })
+            }
+
+            // hero.component.html
+            &ltbutton 
+                class="btn btn-primary mx-2" 
+                (click)="changeHero()"
+                *ngIf="name != 'spiderman'">
+                Cambiar Nombre
+            &lt/button>
+            
+            &ltbutton class="btn btn-primary" (click)="changeAge()" *ngIf="age != 25">
+                Cambiar Edad
+            &lt/button>
+            
+            &ltbutton class="btn btn-primary mx-2" (click)="reset()">Reset&lt/button>
+        </pre>
+    </section>
+    <hr>
+
+    <section class="container">
+        <h3>45 de 404 - Directiva *ngFor</h3>
+        <pre class="prettyprint">
+        
+            // list.component.ts
+
+            public heroNames: string[] = ['Hulk', 'She Hulk', 'Thor', 'Ironman', 'Spiderman']
+
+            // list.component.html
+
+            &ltul class="list-group">
+                &ltli class="list-group-item" *ngFor="let name of heroNames">
+                    {{ name }}
+                &lt/li>
+            &lt/ul>
+        </pre>
+    </section>
+    <hr>
+
+    <section class="container">
+        <h3>46 de 404 - Ng-template y el ngIf else</h3>
+        
+    </section>
+    <hr>
+</body>
+
+</html>
