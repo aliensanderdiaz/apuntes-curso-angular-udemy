@@ -393,11 +393,137 @@
     </section>
     <hr>
 
-    <section class="container">
-        <h3>46 de 404 - Ng-template y el ngIf else</h3>
+<section class="container">
+  <article class="col">
+    <h2>Sección 46 de 404 - ng-template y el ngif-else</h2>
+    <pre class="prettyprint">
+            
+        // list.component.ts
+
+        public heroNames: string[] = ['Hulk', 'Thor', 'SpiderMan', 'IronMan'];
+
+        public deletedHero?: string;
+      
+        removeLastHero(): void {
+          this.deletedHero = this.heroNames.pop() || '';
+        }
+
+        // list.component.html
+
+        &lth3>Lista de Heroes&lt/h3>
+
+        &ltdiv *ngIf="deletedHero; else nothingWasDeleted">
+          &lth3>Heroe borrado &ltsmall class="text-danger"> {{ deletedHero }} &lt/small>&lt/h3>
+        &lt/div>
         
-    </section>
-    <hr>
+        &ltng-template #nothingWasDeleted>
+          &lth3>No ha borrado nada&lt/h3>
+        &lt/ng-template>
+        
+        &ltbutton class="btn btn-outline-danger" (click)="removeLastHero()" *ngIf="heroNames.length > 0">
+          Borrar último heroe
+        &lt/button>
+        
+        &ltul class="list-group">
+          &ltli class="list-group-item" *ngFor="let name of heroNames">{{ name }}&lt/li>
+        &lt/ul>
+        
+    </pre>
+  </article>
+</section>
+
+<hr>
+
+<section class="container">
+  <article class="col">
+    <h2>Sección 47 de 404 - Módulos en Angular</h2>
+    <pre class="prettyprint">
+            
+        // counter.module.ts
+
+        import { NgModule } from "@angular/core";
+        import { CounterComponent } from "./components/counter/counter.component";
+        
+        @NgModule({
+          declarations: [
+            CounterComponent
+          ],
+          exports: [
+            CounterComponent
+          ]
+        })
+        export class CounterModule {}
+    </pre>
+
+    <pre class="prettyprint">
+            
+        // app.module.ts
+
+        imports: [
+            BrowserModule,
+            CounterModule
+        ],
+    </pre>
+  </article>
+</section>
+
+<hr>
+
+<section class="container">
+  <article class="col">
+    <h2>Sección 48 de 404 - Tarea sobre modulos</h2>
+    <pre class="prettyprint">
+            
+        // heroes.module.ts
+        import { NgModule } from "@angular/core";
+        import { CommonModule } from "@angular/common";
+        
+        import { ListComponent } from "./list/list.component";
+        import { HeroComponent } from "./hero/hero.component";
+        
+        @NgModule({
+          declarations: [
+            ListComponent,
+            HeroComponent
+          ],
+          imports: [
+            CommonModule
+          ],
+          exports: [
+            ListComponent,
+            HeroComponent
+          ]
+        })
+        export class HeroesModule {}
+
+        // app.module.ts
+
+        imports: [
+            BrowserModule,
+            CounterModule,
+            HeroesModule
+        ],
+    </pre>
+  </article>
+</section>
+
+<hr>
+
+<section class="container">
+  <article class="col">
+    <h2>Sección 49 de 404 - Bonus: Hacer respaldo de nuestro proyecto en Github</h2>
+    
+  </article>
+</section>
+
+<hr>
+
+<section class="container">
+  <article class="col">
+    <h2>Sección 50 de 404 - Código fuente de la sección</h2>
+    <a href="https://github.com/Klerith/angular-bases">https://github.com/Klerith/angular-bases</a>
+  </article>
+</section>
 </body>
 
 </html>

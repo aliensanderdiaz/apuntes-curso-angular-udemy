@@ -17,6 +17,353 @@
                 <h1>Sección 5 de 29 - Expandir Bases de Angular</h1>
             </div>
         </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="list-group">
+                        <a href="./index.html" class="list-group-item list-group-item-action">
+                            Volver
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <main class="container">
+            <hr>
+            
+            <section class="row">
+              <article class="col">
+                <h2>Sección 51 de 404 - Introducción a la sección</h2>
+                
+              </article>
+            </section>
+            <hr>
+            
+            <section class="row">
+              <article class="col">
+                <h2>Sección 52 de 404 - Temas puntuales de la sección</h2>
+                
+              </article>
+            </section>
+            <hr>
+            
+            <section class="row">
+              <article class="col">
+                <h2>Sección 53 de 404 - Continuación del proyecto</h2>
+                
+              </article>
+            </section>
+        
+            <hr>
+            
+            <section class="row">
+              <article class="col">
+                <h2>Sección 54 de 404 - Modulo DBZ (Dragon Ball Z)</h2>
+                <pre class="prettyprint">
+                        
+                    > ng g m dbz
+                    > ng g c dbz/pages/main-page
+        
+                    // app.module.ts
+        
+                    imports: [
+                        ...
+                        DbzModule
+                    ],
+        
+                    // dbz.module.ts
+        
+                    exports: [
+                        MainPageComponent
+                    ]
+        
+                    // main-page.component.ts
+        
+                    selector: 'app-dbz-main-page',
+        
+                    // app.component.html
+        
+                    &ltapp-dbz-main-page>&lt/app-dbz-main-page>
+                </pre>
+              </article>
+            </section>
+        
+            <hr>
+            
+            <section class="row">
+              <article class="col">
+                <h2>Sección 55 de 404 - Resolución de la tarea - DBZ module</h2>
+                
+              </article>
+            </section>
+        
+            <hr>
+            
+            <section class="row">
+              <article class="col">
+                <h2>Sección 56 de 404 - Diseño de la pantalla a trabajar</h2>
+                <pre class="prettyprint">
+                        
+                    &lth1>DBZ Personajes&lt/h1>
+        
+                    &lthr />
+                    
+                    &ltdiv class="row">
+                      &ltdiv class="col">
+                        &lth4>Listado&lt/h4>
+                        &ltul class="list-group">
+                          &ltul class="list-group-item">
+                            Krillin - 500
+                          &lt/ul>
+                          &ltul class="list-group-item">
+                            Goku - 10,000
+                          &lt/ul>
+                        &lt/ul>
+                      &lt/div>
+                      &ltdiv class="col">
+                        &lth4>Agregar Personaje&lt/h4>
+                    
+                        &ltform action="" class="row">
+                          &ltinput type="text" class="form-control mb-2" placeholder="Nombre">
+                    
+                          &ltinput type="number" class="form-control mb-2" placeholder="Poder">
+                    
+                          &ltbutton type="submit" class="btn btn-primary">Agregar&lt/button>
+                        &lt/form>
+                      &lt/div>
+                    &lt/div>
+                    
+                </pre>
+              </article>
+            </section>
+        
+            <hr>
+            
+            <section class="row">
+              <article class="col">
+                <h2>Sección 57 de 404 - Pensemos en componentes pequeños</h2>
+                <pre class="prettyprint">
+                        
+                  > ng g c dbz/components/list
+                  > ng g c dbz/components/add-character
+                </pre>
+        
+                <pre class="prettyprint">
+                        
+                  // dbz/components/list.component.ts
+                  
+                  selector: 'dbz-list',
+                  
+                  // dbz/components/list.component.html
+        
+                  &lth4>Listado&lt/h4>
+                  &ltul class="list-group">
+                    &ltul class="list-group-item">
+                      Krillin - 500
+                    &lt/ul>
+                    &ltul class="list-group-item">
+                      Goku - 10,000
+                    &lt/ul>
+                  &lt/ul>
+                  
+                  // dbz/components/add-character.component.ts
+                  
+                  selector: 'dbz-add-character',
+                  
+                  // dbz/components/add-character.component.html
+        
+                  &lth4>Agregar Personaje&lt/h4>
+        
+                  &ltform action="" class="row">
+                    &ltinput type="text" class="form-control mb-2" placeholder="Nombre" />
+                  
+                    &ltinput type="number" class="form-control mb-2" placeholder="Poder" />
+                  
+                    &ltbutton type="submit" class="btn btn-primary">Agregar&lt/button>
+                  &lt/form>
+        
+                  // main-page.component.html
+        
+                  &ltdiv class="row">
+                    &ltdiv class="col">
+                      &ltdbz-list>&lt/dbz-list>
+                    &lt/div>
+                    &ltdiv class="col">
+                      &ltdbz-add-character>&lt/dbz-add-character>
+                    &lt/div>
+                  &lt/div>
+                </pre>
+              </article>
+            </section>
+        
+            <hr>
+            
+            <section class="row">
+              <article class="col">
+                <h2>Sección 58 de 404 - Resolución de la tarea - AddCharacter</h2>
+                
+              </article>
+            </section>
+        
+            <hr>
+            
+            <section class="row">
+              <article class="col">
+                <h2>Sección 59 de 404 - @Input() - Recibir del padre</h2>
+                <pre class="prettyprint">
+                        
+                  // character.interface.ts
+        
+                  export interface Character {
+                    name: string;
+                    power: number;
+                  }
+        
+                  // list.component.ts
+        
+                  @Input()
+                  public characterList: Character[] = [
+                    {
+                      name: 'Trunks',
+                      power: 10
+                    }
+                  ]
+        
+                  // main-page.component.ts
+        
+                  public characters: Character[] = [
+                    {
+                      name: 'Krillin',
+                      power: 500
+                    },
+                    {
+                      name: 'Goku',
+                      power: 10000
+                    },
+                    {
+                      name: 'Vegeta',
+                      power: 7500
+                    }
+                  ]
+        
+                  // main-page.component.html
+        
+                  &ltdbz-list [characterList]="characters">&lt/dbz-list>
+        
+                  // list.component.html
+        
+                  &ltli *ngFor="let character of characterList"
+                    class="list-group-item">
+                    &ltspan>{{ character.name }} - &lt/span>
+                    &ltstrong>Power: &lt/strong>
+                    &ltspan>{{ character.power | number }}&lt/span>
+                  &lt/li>
+                </pre>  
+              </article>
+            </section>
+        
+            <hr>
+            
+            <section class="row">
+              <article class="col">
+                <h2>Sección 60 de 404 - Expandiendo el *ngFor</h2>
+                <pre class="prettyprint">
+                        
+                  &ltli *ngFor="
+                      let character of characterList;
+                      let i = index;
+                      let isFirst = first;
+                      let isLast = last;
+                      let isEven = even;
+                      let isOdd = odd;
+                    "
+                    class="list-group-item">
+                    &ltspan class="text-primary">{{ i + 1 }}. &lt/span>
+                    &ltspan>{{ character.name }} - &lt/span>
+                    &ltstrong>Power: &lt/strong>
+                    &ltspan>{{ character.power | number }}&lt/span>
+                  &lt/li>
+                </pre>
+              </article>
+            </section>
+        
+            <hr>
+            
+            <section class="row">
+              <article class="col">
+                <h2>Sección 61 de 404 - ngClass - Clases basado en condiciones</h2>
+                <pre class="prettyprint">
+                        
+                  [ngClass]="{ 'list-group-item-dark': isEven }"
+                </pre>
+              </article>
+            </section>
+        
+            <hr>
+            
+            <section class="row">
+              <article class="col">
+                <h2>Sección 62 de 404 - FormsModule y ngModel</h2>
+                <pre class="prettyprint">
+                        
+                  // dbz.module.ts
+        
+                  imports: [
+                    CommonModule,
+                    FormsModule
+                  ],
+        
+                  // add-character.component.ts
+        
+                  character: Character = {
+                    name: '',
+                    power: 0
+                  }
+                
+                  emitCharacter(): void {
+                    console.log( this.character )
+                  }
+        
+                  // add-character.component.html
+        
+                  &ltinput
+                    [(ngModel)]="character.name"
+                    name="name"
+                    type="text"
+                    class="form-control mb-2"
+                    placeholder="Nombre"
+                  />
+                
+                  &ltinput
+                    [(ngModel)]="character.power"
+                    name="power"
+                    type="number"
+                    class="form-control mb-2"
+                    placeholder="Poder"
+                  />
+                
+                  &ltbutton type="submit" class="btn btn-primary" (click)="emitCharacter()">Agregar&lt/button>
+                </pre>
+              </article>
+            </section>
+        
+            <hr>
+            
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        </main>
         <section class="container">
             <h3>Sección 63 de 404 - @Output() - Emitir eventos al padre</h3>
             <pre class="prettyprint">
@@ -76,9 +423,264 @@
 
         <section class="container">
             <h3>Sección 64 de 404 - Formas de depurar la app</h3>
-            
+            <p>Extensión Angular DevTools
+                <br>
+                o depurar en el código con debugger;
+            </p>
+            <pre class="prettyprint">
+                    
+              debugger;
+            </pre>
         </section>
+        
+        
+
         <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 65 de 404 - Añadir personaje al listado</h2>
+            <pre class="prettyprint">
+                
+                // main-page.component.html
+
+                &ltdbz-list [characterList]="characters" (onDeleteCharacter)="onDeleteCharacter( $event )">&lt/dbz-list>
+
+                // main-page.component.js
+
+                onDeleteCharacter( index: number ): void {
+                    this.characters.splice(index, 1)
+                }
+
+                // list.component.html
+
+                &ltul class="list-group">
+                &ltli
+                  *ngFor="
+                    let character of characterList;
+                    let i = index;
+                    let isFirst = first;
+                    let isLast = last;
+                    let isEven = even;
+                    let isOdd = odd
+                  "
+                  class="list-group-item d-flex justify-content-between align-items-center"
+                  [ngClass]="{ 'list-group-item-dark': isEven }"
+                >
+                  &ltdiv>
+                    &ltspan class="text-primary">{{ i + 1 }}. &lt/span>
+                    &ltspan>{{ character.name }} - &lt/span>
+                    &ltstrong>Power: &lt/strong>
+                    &ltspan>{{ character.power | number }}&lt/span>
+                  &lt/div>
+                  &ltbutton class="btn btn-danger" (click)="deleteCharacter(i)">X&lt/button>
+                &lt/li>
+              &lt/ul>
+
+              // list.component.ts
+
+              @Output()
+              public onDeleteCharacter: EventEmitter<number> = new EventEmitter()
+            
+              ...
+            
+              deleteCharacter( index: number): void {
+                console.log({ index })
+                this.onDeleteCharacter.emit( index )
+              }
+            </pre>
+          </article>
+        </section>
+
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 66 de 404 - Solucion de la tarea - flujo completo</h2>
+            
+          </article>
+        </section>
+
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 67 de 404 - Servicios</h2>
+            <pre class="prettyprint">
+                    
+                >  ng g s dbz/services/dbz
+            </pre>
+
+            <pre class="prettyprint">
+
+                // dbz.service.ts
+                    
+                public characters: Character[] = [
+                {
+                  name: 'Krillin',
+                  power: 500
+                },
+                {
+                  name: 'Goku',
+                  power: 10000
+                },
+                {
+                  name: 'Vegeta',
+                  power: 7500
+                }
+              ]
+            
+              constructor() { }
+            
+              onNewCharacter( newCharacter: Character ):void {
+                console.log({ newCharacter })
+                this.characters.push( newCharacter )
+                console.log( this.characters )
+              }
+            
+              onDeleteCharacter( index: number ): void {
+                this.characters.splice(index, 1)
+              }
+            </pre>
+
+            <pre class="prettyprint">
+                    
+                // main-page.component.ts
+
+                constructor(
+                    private dbzService: DbzService
+                ) {}
+            </pre>
+          </article>
+        </section>
+
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 68 de 404 - Paquetes externos - UUID</h2>
+            <pre class="prettyprint">
+                    
+                > npm i uuid
+                > npm i @types/uuid -D
+            </pre>
+
+            <pre class="prettyprint">
+                    
+                // dbz.service.ts
+
+                import { v4 as uuid } from "uuid";
+
+                public characters: Character[] = [
+                {
+                  id: uuid(),
+                  name: 'Krillin',
+                  power: 500
+                },
+                {
+                  id: uuid(),
+                  name: 'Goku',
+                  power: 10000
+                },
+                {
+                  id: uuid(),
+                  name: 'Vegeta',
+                  power: 7500
+                }
+              ]
+            
+              onNewCharacter( character: Character ):void {
+                const newCharacter: Character = {
+                  id: uuid(),
+                  ...character
+                }
+                this.characters.push( newCharacter )
+              }
+            
+              deleteCharacterById( id: string ): void {
+                console.log({ id, mensaje: 'Servicio' })
+                this.characters = this.characters.filter(character => character.id !== id)
+                console.log( this.characters )
+              }
+
+              // character.interface.ts
+
+              export interface Character {
+                id?: string;
+                name: string;
+                power: number;
+              }
+
+              // main-page.component.ts
+
+              &ltdbz-list [characterList]="dbzService.characters" (onDeleteCharacter)="onDeleteCharacter( $event )" (onDeleteCharacterById)="onDeleteCharacterById( $event )">&lt/dbz-list>
+
+            </pre>
+
+            <p>Otra forma</p>
+
+            <pre class="prettyprint">
+                    
+                // list.component.html
+
+                &ltbutton class="btn btn-danger" (click)="deleteCharacterById( character.id )">X&lt/button>
+
+                // list.component.ts
+
+                deleteCharacterById( id?: string): void {
+
+                    if (!id) return;
+                    this.onDeleteCharacterById.emit( id )
+                  }
+            </pre>
+          </article>
+        </section>
+
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 69 de 404 - Resolucion de la tarea</h2>
+            
+          </article>
+        </section>
+
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 70 de 404 - Servicio Privado</h2>
+            <pre class="prettyprint">
+                    
+                constructor(private dbzService: DbzService) {}
+
+                get characters(): Character[] {
+                  return [...this.dbzService.characters]
+                }
+            </pre>
+          </article>
+        </section>
+
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 71 de 404 - Código fuente de la sección</h2>
+            <a href="https://github.com/Klerith/angular-bases/tree/fin-seccion-5">https://github.com/Klerith/angular-bases/tree/fin-seccion-5</a>
+          </article>
+        </section>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     </div>
