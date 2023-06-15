@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sección 8 de 29 - Image Loader</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+</head>
+
+<body>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col">
+                <h1>Sección 8 de 29 - Image Loader</h1>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col">
+                <div class="list-group">
+                    <a href="./index.html" class="list-group-item list-group-item-action">
+                        Volver
+                    </a>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <section class="container">
+            <h3>Sección 98 de 404 - Introducción a la sección</h3>
+            
+        </section>
+        <hr>
+
+        <section class="container">
+            <h3>Sección 99 de 404 - Temas puntuales de la sección</h3>
+            
+        </section>
+        <hr>
+
+        <section class="container">
+            <h3>Sección 100 de 404 - Demostración de la sección</h3>
+            
+        </section>
+        <hr>
+
+        <section class="container">
+            <h3>Sección 101 de 404 - Pensemos en componentes</h3>
+            <pre class="prettyprint">
+            
+                > ng g c gifs/components/card
+            </pre>
+        </section>
+        <hr>
+
+        <section class="container">
+            <h3>Sección 102 de 404 - Solución de la tarea</h3>
+            <pre class="prettyprint">
+            
+                // card.component.ts
+
+                @Input()
+                public gif!: Gif
+              
+                ngOnInit(): void {
+                  if (!this.gif) throw new Error('Gif property is required')
+                }
+
+                // card.component.html
+
+                &ltdiv class="card mb-2 text-center bg-dark">
+
+                    &ltimg [src]="gif.images.downsized_medium.url" [alt]="gif.title" class="card-img-top">
+                
+                    &ltdiv class="card-body text-white">
+                        &ltdiv class="card-text">
+                            {{ gif.title }}
+                        &lt/div>
+                    &lt/div>
+                &lt/div>
+
+                // card-list.component.html
+
+                &ltgifs-card 
+                    *ngFor="let gif of gifs"
+                    class="col-md-3 col-sm-6" 
+                    [gif]="gif">
+                
+                &lt/gifs-card>
+            </pre>
+        </section>
+        <hr>
+
+        <section class="container">
+            <h3>Sección 103 de 404 - Lazy Image - Parte 1</h3>
+            <pre class="prettyprint">
+            
+                > ng g component shared/components/lazyImage
+            </pre>
+        </section>
+        <hr>
+
+        <section class="container">
+            <h3>Sección 104 de 404 - Lazy Image - Parte 2</h3>
+            <a href="https://samherbert.net/svg-loaders/" target="_blank" rel="noopener noreferrer">https://samherbert.net/svg-loaders/</a>
+            <br>
+            <a href="https://github.com/SamHerbert/SVG-Loaders/blob/master/svg-loaders/rings.svg" target="_blank" rel="noopener noreferrer">https://github.com/SamHerbert/SVG-Loaders/blob/master/svg-loaders/rings.svg</a>
+
+            <pre class="prettyprint">
+            
+                // card.component.html
+
+                &ltdiv class="card mb-2 text-center bg-dark">
+
+                    &lt!-- &ltimg [src]="gif.images.downsized_medium.url" [alt]="gif.title" class="card-img-top"> -->
+                
+                    &ltshared-lazy-image 
+                        [url]="gif.images.downsized_medium.url" 
+                        [alt]="gif.title"
+                        >&lt/shared-lazy-image>
+                
+                    &ltdiv class="card-body text-white">
+                        &ltdiv class="card-text">
+                            {{ gif.title || 'No title' }}
+                        &lt/div>
+                    &lt/div>
+                &lt/div>
+            </pre>
+
+            <pre class="prettyprint">
+            
+                // lazy-image.component.ts
+
+                @Input()
+                public url!: string
+              
+                @Input()
+                public alt: string = ''
+              
+                public hasLoaded: boolean = false
+              
+                ngOnInit(): void {
+                  if (!this.url) throw new Error('URL property is required')
+                }
+              
+                onLoad() {
+                  console.log('Image loaded')
+                  this.hasLoaded = true
+                }
+
+                // lazy-image.component.html
+
+                &ltdiv class="d-flex justify-content-center">
+                    &ltimg 
+                        [src]="url" 
+                        [alt]="alt" 
+                        class="card-img-top"
+                        (load)="onLoad()"
+                        [ngStyle]="{ display: hasLoaded ? '' : 'none'}">
+                
+                    &ltimg 
+                        *ngIf="!hasLoaded"
+                        src="assets/loader.svg" 
+                        alt="loader"
+                        height="35"
+                        width="35"
+                        class="mt-3"
+                    >
+                &lt/div>
+            </pre>
+        </section>
+        <hr>
+
+        <section class="container">
+            <h3>Sección 105 de 404 - Animaciones de CSS</h3>
+            <a href="https://animate.style/" target="_blank" rel="noopener noreferrer">https://animate.style/</a>
+
+            <pre class="prettyprint">
+            
+                // lazy-image.component.html
+
+                &ltimg 
+                    [src]="url" 
+                    [alt]="alt" 
+                    class="card-img-top animate__animated animate__fadeIn"
+                    (load)="onLoad()"
+                    [ngStyle]="{ display: hasLoaded ? '' : 'none'}">
+            </pre>
+        </section>
+        <hr>
+
+        <section class="container">
+            <h3>Sección 106 de 404 - Código fuente de la sección</h3>
+            <a href="https://github.com/Klerith/angular-gif-app/tree/fin-seccion-8" target="_blank" rel="noopener noreferrer">https://github.com/Klerith/angular-gif-app/tree/fin-seccion-8</a>
+        </section>
+        <hr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

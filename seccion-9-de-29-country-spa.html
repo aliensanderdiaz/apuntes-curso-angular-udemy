@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sección 9 de 29 - Country SPA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+</head>
+
+<body>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col">
+                <h1>Sección 9 de 29 - Country SPA</h1>
+            </div>
+        </div>
+
+        <hr>
+        <div class="row">
+            <div class="col">
+                <div class="list-group">
+                    <a href="./index.html" class="list-group-item list-group-item-action">
+                        Volver
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <section class="container">
+            <h3>Sección 107 de 404 - Introducción a la sección</h3>
+            
+        </section>
+        <hr>
+
+        <section class="container">
+            <h3>Sección 108 de 404 - Temas puntuales de la sección</h3>
+            
+        </section>
+        <hr>
+
+        <section class="container">
+            <h3>Sección 109 de 404 - Demostración de la sección</h3>
+            
+        </section>
+        <hr>
+
+        <section class="container">
+            <h3>Sección 110 de 404 - Inicio del proyecto - CountryApp</h3>
+            <pre class="prettyprint">
+            
+                > ng new countryApp
+                > ng g m countries
+                > ng g m shared
+            </pre>
+        </section>
+        <hr>
+
+        <section class="container">
+            <h3>Sección 111 de 404 - Router Module y Páginas - SPA</h3>
+            <pre class="prettyprint">
+            
+                > ng g c shared/pages/homePage
+                > ng g c shared/pages/aboutPage
+
+            </pre>
+
+            <pre class="prettyprint">
+            
+                // app-routing.module.ts
+
+                const routes: Routes = [
+                    {
+                        path: 'home',
+                        component: HomePageComponent
+                    },
+                    {
+                        path: 'about',
+                        component: AboutPageComponent
+                    },
+                    {
+                        path: '**',
+                        redirectTo: 'home'
+                    }
+                ];
+                
+                @NgModule({
+                    imports: [RouterModule.forRoot(routes)],
+                    exports: [RouterModule]
+                })
+                export class AppRoutingModule { }
+            </pre>
+        </section>
+        <hr>
+
+        <section class="container">
+            <h3>Sección 112 de 404 - RouterLink y RouterLinkOptions</h3>
+            <pre class="prettyprint">
+            
+                > ng g c shared/components/sidebar
+                > ng g c shared/pages/contactPage
+            </pre>
+        </section>
+        <hr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
