@@ -402,6 +402,55 @@
         </section>
         <hr>
 
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 95 de 404 - LocalStorage - Persistencia local</h2>
+            <pre class="prettyprint">
+                    
+              // gifs.service.ts
+
+              private saveLocalStorage():void {
+                localStorage.setItem('history', JSON.stringify(this._tagsHistory))
+              }
+            </pre>
+          </article>
+        </section>
+
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 96 de 404 - Leer del LocalStorage</h2>
+            <pre class="prettyprint">
+
+              // gifsService
+                    
+              private loadLocalStorage():void {
+                if (!localStorage.getItem('history')) return;
+
+                this._tagsHistory = JSON.parse(localStorage.getItem('history')!)
+
+                this.searchTag(this._tagsHistory[0])
+              }
+            </pre>
+
+            <p>Poner este método en el constructor</p>
+          </article>
+        </section>
+
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 97 de 404 - Código fuente de la sección</h2>
+
+            <a href="https://github.com/Klerith/angular-gif-app/tree/fin-seccion-7" target="_blank" rel="noopener noreferrer">https://github.com/Klerith/angular-gif-app/tree/fin-seccion-7</a>
+            
+          </article>
+        </section>
+
 
 
 
