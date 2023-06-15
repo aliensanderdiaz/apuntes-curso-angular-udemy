@@ -115,6 +115,293 @@
           </article>
         </section>
 
+        <section class="container">
+            <h3>Sección 84 de 404 - Diseño de Gifs Components</h3>
+            <pre class="prettyprint">
+            
+                > ng g c gifs/pages/home
+                > ng g c gifs/components/search-box
+                > ng g c gifs/components/card-list
+
+            </pre>
+
+            <pre class="prettyprint">
+
+              // search-box.component.html
+            
+              &lth5>Buscar:&lt/h5>
+              &ltinput 
+                  type="text"
+                  class="form-control"
+                  placeholder="Buscar gifs...">
+            </pre>
+
+            <pre class="prettyprint">
+
+              // home-page.component.html
+            
+              &ltdiv class="row p-3">
+                  &ltdiv class="col-12">
+                      &lt!-- Busqueda -->
+                      &ltgifs-search-box>&lt/gifs-search-box>
+                  &lt/div>
+              
+                  &ltdiv class="col-12 pt-2">
+                      &lt!-- Listado de Gifs -->
+                      &ltgifs-card-list>&lt/gifs-card-list>
+                  &lt/div>
+              &lt/div>
+            </pre>
+
+            <pre class="prettyprint">
+            
+                // app.component.html
+
+                &ltgifs-home-page class="flex-fill">&lt/gifs-home-page>
+            </pre>
+        </section>
+        <hr>
+
+        <section class="container">
+            <h3>Sección 85 de 404 - Resolución de la tarea - CardList</h3>
+            <pre class="prettyprint">
+            
+              &ltdiv class="row">
+
+                  &ltdiv class="col-md-3 col-sm-6">
+                      &ltdiv class="card mb-2 text-center bg-dark">
+              
+                          &lt!-- TODO: Crear imagen -->
+              
+                          &ltdiv class="card-body text-white">
+                              &ltdiv class="card-text">
+                                  Hola Mundo
+                              &lt/div>
+                          &lt/div>
+                      &lt/div>
+                  &lt/div>
+              &lt/div>
+            </pre>
+        </section>
+        <hr>
+
+        <section class="container">
+            <h3>Sección 86 de 404 - @ViewChild - Referencia al HTML</h3>
+
+            <pre class="prettyprint">
+            
+                // search-box.component.html
+
+                &ltinput 
+                  type="text"
+                  class="form-control"
+                  placeholder="Buscar gifs..."
+                  (keyup.enter)="searchTag()"
+                  #txtTagInput>
+
+                // search-box.component.ts
+
+                @ViewChild('txtTagInput')
+                public tagInput!: ElementRef<HTMLInputElement>
+              
+                searchTag() {
+                  const newTag = this.tagInput.nativeElement.value
+                  console.log({ newTag })
+                }
+            </pre>
+        </section>
+        <hr>
+
+        <section class="container">
+            <h3>Sección 87 de 404 - GifsService</h3>
+            <pre class="prettyprint">
+            
+                > ng g s gifs/services/gifs
+
+                // gifs.service.ts
+
+                private _tagsHistory: string[] = []
+
+                constructor() { }
+              
+                get tagsHistory() {
+                  return [...this._tagsHistory]
+                }
+              
+                searchTag( tag: string ): void {
+                  this._tagsHistory.unshift( tag )
+                }
+                
+                // search-box.component.ts
+
+                searchTag() {
+                  const newTag = this.tagInput.nativeElement.value
+                  this.gifsService.searchTag( newTag )
+                  this.tagInput.nativeElement.value = ''
+                  console.log({ newTag })
+                }
+
+                // sidebar.component.ts
+
+                get tags() {
+                  return this.gifsService.tagsHistory
+                }
+
+                // sidebar.component.html
+
+                &ltbutton 
+                  class="list-group-item list-group-item-action" 
+                  *ngFor="let tag of tags">
+                    {{ tag | titlecase }}
+                &lt/button>
+            </pre>
+        </section>
+        <hr>
+
+        <section class="container">
+            <h3>Sección 88 de 404 - Validaciones al servicio</h3>
+            <pre class="prettyprint">
+            
+                // gifs.service.ts
+
+                private organizeHistory(tag: string) {
+                  tag = tag.toLowerCase()
+              
+                  if (this._tagsHistory.includes(tag)) {
+                    this._tagsHistory = this._tagsHistory.filter( oldTag => oldTag !== tag)
+                  }
+              
+                  this._tagsHistory.unshift( tag )
+                  this._tagsHistory = this._tagsHistory.splice(0, 10)
+                }
+              
+                searchTag( tag: string ): void {
+                  if (tag.length === 0) return
+              
+                  this.organizeHistory( tag )
+                }
+            </pre>
+        </section>
+        <hr>
+
+        <section class="container">
+            <h3>Sección 89 de 404 - Giphy Api Key - Giphy Developers</h3>
+            
+        </section>
+        <hr>
+
+        <section class="container">
+            <h3>Sección 90 de 404 - Realizar una petición HTTP</h3>
+            <pre class="prettyprint">
+            
+                // gifs.service.ts
+
+              const params = new HttpParams()
+                .set('api_key', this.apiKey)
+                .set('limit', '10')
+                .set('q', tag)
+          
+              this.http.get( this.url, { params })
+                .subscribe({
+                  next: (response: any) => {
+                    console.log({ response })
+                  }
+                })
+            </pre>
+        </section>
+        <hr>
+
+        <section class="container">
+            <h3>Sección 91 de 404 - Colocar un tipo de dato a una respuesta HTTP</h3>
+            <a href="https://app.quicktype.io/" target="_blank" rel="noopener noreferrer">https://app.quicktype.io/</a>
+            <pre class="prettyprint">
+            
+                // gifs.service.ts
+
+                this.http.get&ltSearchResponse>( this.url, { params })
+                  .subscribe({
+                    next: (response) => {
+                      this.gifList = response.data
+                      console.log({ gifList: this.gifList })
+                    }
+                  })
+            </pre>
+        </section>
+        <hr>
+
+        <section class="container">
+            <h3>Sección 92 de 104 - Mostrar los gifs en pantalla</h3>
+            <pre class="prettyprint">
+            
+              // home-page.component.ts
+
+              get gifs(): Gif[] {
+                return this.gifsService.gifList
+              }
+
+              // home-page.component.html
+
+              &ltgifs-card-list [gifs]="gifs">&lt/gifs-card-list>
+
+              // card-list.component.ts
+
+              @Input()
+              gifs: Gif[] = []
+
+              // card-list.component.html
+
+              &ltdiv class="col-md-3 col-sm-6" *ngFor="let gif of gifs">
+              &ltdiv class="card mb-2 text-center bg-dark">
+          
+                  &lt!-- TODO: Crear imagen -->
+          
+                  &ltdiv class="card-body text-white">
+                      &ltdiv class="card-text">
+                          {{ gif.url }}
+                      &lt/div>
+                  &lt/div>
+              &lt/div>
+          &lt/div>
+            </pre>
+        </section>
+        <hr>
+
+        <section class="container">
+            <h3>Sección 93 de 404 - Mostrar la imagen del Gif</h3>
+            <pre class="prettyprint">
+            
+                // card-list.component.html
+
+                &ltimg 
+                [src]="gif.images.downsized_medium.url" 
+                [alt]="gif.title"
+                class="card-img-top">
+            </pre>
+        </section>
+        <hr>
+
+        <section class="container">
+            <h3>Sección 94 de 404 - Resolución de la tarea</h3>
+            <pre class="prettyprint">
+            
+                // sidebar
+
+                &ltbutton 
+                class="list-group-item list-group-item-action" 
+                *ngFor="let tag of tags"
+                (click)="cargarGifs( tag )">
+                  {{ tag | titlecase }}
+              &lt/button>
+
+              // sidebar
+
+              cargarGifs(tag: string) {
+                this.gifsService.searchTag( tag )
+              }
+            </pre>
+        </section>
+        <hr>
+
 
 
 
