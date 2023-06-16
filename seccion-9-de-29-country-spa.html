@@ -107,6 +107,305 @@
         </section>
         <hr>
 
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 113 de 404 - Resolución de la tarea</h2>
+            <pre class="prettyprint">
+                
+                // sidebar
+
+                &lth2>Países&lt/h2>
+                &lthr>
+                
+                &ltul class="list-group">
+                    &lta  routerLink="home" 
+                        routerLinkActive="active"
+                        [routerLinkActiveOptions]="{ exact: true }"
+                        class="list-group-item">
+                        Home Page
+                    &lt/a>
+                    &lta  routerLink="about" 
+                        routerLinkActive="active"
+                        class="list-group-item">
+                        About Page
+                    &lt/a>
+                    &lta  routerLink="contact" 
+                        routerLinkActive="active"
+                        class="list-group-item">
+                        Contact Page
+                    &lt/a>
+                &lt/ul>
+            </pre>
+          </article>
+        </section>
+
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 114 de 404 - Countries Routing App</h2>
+            <pre class="prettyprint">
+                    
+                > ng g c countries/pages/byCapitalPage
+                > ng g c countries/pages/byCountryPage
+                > ng g c countries/pages/byRegionPage
+                > ng g c countries/pages/CountryPage
+            </pre>
+
+            <pre class="prettyprint">
+                    
+                // countries-routing.module.ts
+
+                const routes: Routes = [
+                  {
+                    path: 'by-capital',
+                    component: ByCapitalPageComponent
+                  },
+                  {
+                    path: 'by-country',
+                    component: ByCountryPageComponent
+                  },
+                  {
+                    path: 'by-region',
+                    component: ByRegionPageComponent
+                  },
+                  {
+                    path: 'by/:id',
+                    component: CountryPageComponent
+                  },
+                ]
+                
+                @NgModule({
+                  imports: [RouterModule.forChild(routes)],
+                  exports: [RouterModule]
+                })
+                export class CountriesRoutingModule { }
+                
+            </pre>
+          </article>
+        </section>
+
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 115 de 404 - LazyLoad - Carga Perezosa</h2>
+            <pre class="prettyprint">
+                    
+                // app-routing.module.ts
+
+                {
+                    path: 'countries',
+                    loadChildren: () => import('./countries/countries.module').then(m => m.CountriesModule)
+                },
+            </pre>
+          </article>
+        </section>
+
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 116 de 404 - Estructura de páginas y SearchBoxComponent</h2>
+            <pre class="prettyprint">
+                    
+                > ng g c shared/components/search-box
+            </pre>
+
+            <pre class="prettyprint">
+                    
+                // app-routing.module.ts
+
+                {
+                    path: '**',
+                    redirectTo: 'countries'
+                }
+
+                // countries-routing.module.ts
+
+                {
+                    path: '**',
+                    redirectTo: 'by-capital'
+                },
+
+                // by-capital-page.component.html
+
+                &ltshared-search-box placeholder="Buscar por capital">&lt/shared-search-box>
+
+                // search-box.component.ts
+
+                @Input()
+                public placeholder: string = ''
+
+                // search-box.component.html
+
+                &ltinput type="text" class="form-control" [placeholder]="placeholder">
+            </pre>
+          </article>
+        </section>
+
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 117 de 404 - Funcionamiento del SearchBox</h2>
+            <pre class="prettyprint">
+                    
+                // by-capital-page.component.ts
+
+                searchByCapital( term: string ): void {
+                    console.info('Desde ByCapitalPage')
+                    console.log({ term })
+                }
+
+                // by-capital-page.component.html
+
+                &ltshared-search-box
+                    (onValue)="searchByCapital( $event )"
+                    placeholder="Buscar por capital">&lt/shared-search-box>
+
+                // search-box.component.ts
+
+                @Output()
+                public onValue = new EventEmitter&ltstring>()
+              
+                emitValue( value: string ): void {
+                  this.onValue.emit(value)
+                }
+
+                // search-box.component.html
+
+                &ltinput
+                    type="text"
+                    class="form-control"
+                    [placeholder]="placeholder"
+                    (keyup.enter)="emitValue( txtInput.value )"
+                    #txtInput
+                    >
+            </pre>
+          </article>
+        </section>
+
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 118 de 404 - Countries Service</h2>
+            <a href="https://restcountries.com/#endpoints-capital-city" target="_blank" rel="noopener noreferrer">https://restcountries.com/#endpoints-capital-city</a>
+            <p>
+                https://restcountries.com/v3.1/capital/{capital}
+            </p>
+
+            <p>Hacer las interfaces...</p>
+
+            <pre class="prettyprint">
+                    
+                > ng g s countries/services/countries
+
+                getCapital(term: string): Observable&ltCountry[]> {
+                    const url = `${ this.apiUrl }/capital/${ term }`
+                    return this.http.get&ltCountry[]>(url)
+                }
+            </pre>
+          </article>
+        </section>
+
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 119 de 404 - Mostrar los países en pantalla</h2>
+            <pre class="prettyprint">
+                    
+                // by-capital-page.component.ts
+
+                searchByCapital( term: string ): void {
+                    console.info('Desde ByCapitalPage')
+                    console.log({ term })
+                    this.countriesService.getCapital( term )
+                      .subscribe({
+                        next: (response) => {
+                          console.log({response})
+                          this.countries = response
+                        }
+                      })
+                  }
+
+                // by-capital-page.component.html
+
+                &ltul class="list-group">
+                    &ltli class="list-group-item" *ngFor="let country of countries">
+                    {{ country.capital }}
+                    &lt/li>
+                &lt/ul>
+            </pre>
+          </article>
+        </section>
+
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 120 de 404 - CountryTable Component</h2>
+            <pre class="prettyprint">
+                    
+                > ng g c countries/components/countryTable
+            </pre>
+
+            <pre class="prettyprint">
+
+                // country-table.component.ts
+                    
+                @Input()
+                public countries: Country[] = []
+
+                // country-table.component.html
+
+                &ltdiv
+                *ngIf="countries.length === 0; else table"
+                class="alert alert-warning text-center">
+                No hay paises que mostrar
+              &lt/div>
+              
+              &ltng-template #table>
+                &lttable class="table table-hover">
+                  &ltthead>
+                    &lttr>
+                      &ltth>#&lt/th>
+                      &ltth>Icon&lt/th>
+                      &ltth>Bandera&lt/th>
+                      &ltth>Nombre&lt/th>
+                      &ltth>Capital&lt/th>
+                      &ltth>Población&lt/th>
+                      &ltth>&lt/th>
+                    &lt/tr>
+                  &lt/thead>
+                  &lttbody>
+                    &lttr *ngFor="let country of countries; let i = index">
+                      &lttd>{{ i + 1 }}&lt/td>
+                      &lttd>{{ country.flag }}&lt/td>
+                      &lttd>
+                        &ltimg [src]="country.flags.svg" [alt]="country.name.common">
+                      &lt/td>
+                      &lttd>{{ country.name.common }}&lt/td>
+                      &lttd>{{ country.capital }}&lt/td>
+                      &lttd>{{ country.population | number }}&lt/td>
+                      &lttd>&lta href="#">Ver más&lt/a>&lt/td>
+                    &lt/tr>
+                  &lt/tbody>
+                &lt/table>
+              &lt/ng-template>
+
+              // by-capital-page.component.html
+
+              &ltcountries-table [countries]="countries">&lt/countries-table>
+              
+            </pre>
+          </article>
+        </section>
+
 
 
 
