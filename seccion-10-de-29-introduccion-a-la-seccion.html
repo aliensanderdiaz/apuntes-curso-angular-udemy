@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+<title>Sección 10 de 29 - Mejoras y funcionalidades extras</title>
+</head>
+
+<body>
+<header class="text-center">
+<h1>Sección 10 de 29 - Mejoras y funcionalidades extras</h1>
+</header>
+<main class="container">
+    <hr>
+    <div class="row">
+        <div class="col">
+            <div class="list-group">
+                <a href="./index.html" class="list-group-item list-group-item-action">
+                    Volver
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 128 de 404 - Introducción a la sección</h2>
+        
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 129 de 404 - Temas puntuales de la sección</h2>
+        
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 130 de 404 - Continuación de la sección</h2>
+        
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 131 de 404 - Refactorizaciones en nuestro servicio</h2>
+        <pre class="prettyprint">
+
+            // countries.service.ts
+                
+            private getCountriesRequest( url: string ): Observable&ltCountry[]> {
+                return this.http.get&ltCountry[]>(url)
+                  .pipe(
+                    catchError(() => of([])),
+                    delay( 2000 )
+                    );
+              }
+              
+              searchCountryByAlphaCode(code: string): Observable&ltCountry | null> {
+                const url = `${this.apiUrl}/alpha/${code}`;
+                return this.http.get&ltCountry[]>(url).pipe(
+                  map( countries => countries.length > 0 ? countries[0] : null ),
+                  catchError(() => of(null))
+                );
+              }
+              
+              getCapital(term: string): Observable&ltCountry[]> {
+                const url = `${this.apiUrl}/capital/${term}`;
+                return this.getCountriesRequest( url )
+              }
+              
+              searchCountry(term: string): Observable&ltCountry[]> {
+                const url = `${this.apiUrl}/name/${term}`;
+                return this.getCountriesRequest( url )
+              }
+              
+              searchRegion(term: string): Observable&ltCountry[]> {
+                const url = `${this.apiUrl}/region/${term}`;
+                return this.getCountriesRequest( url )
+              }
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 132 de 404 - LoadingComponent - Mostrar un indicador de carga</h2>
+        <pre class="prettyprint">
+                
+            > ng g c shared/components/loadingSpinner
+
+            // 
+
+            &ltdiv class="spinner-container">
+            &ltspan>Buscando&lt/span>
+            &lt!-- By Sam Herbert (@sherb), for everyone. More @ http://goo.gl/7AJzbL -->
+            &ltsvg
+              width="30"
+              height="30"
+              viewBox="0 0 45 45"
+              xmlns="http://www.w3.org/2000/svg"
+              stroke="#fff"
+            >
+              &ltg
+                fill="none"
+                fill-rule="evenodd"
+                transform="translate(1 1)"
+                stroke-width="2"
+              >
+                &ltcircle cx="22" cy="22" r="6" stroke-opacity="0">
+                  &ltanimate
+                    attributeName="r"
+                    begin="1.5s"
+                    dur="3s"
+                    values="6;22"
+                    calcMode="linear"
+                    repeatCount="indefinite"
+                  />
+                  &ltanimate
+                    attributeName="stroke-opacity"
+                    begin="1.5s"
+                    dur="3s"
+                    values="1;0"
+                    calcMode="linear"
+                    repeatCount="indefinite"
+                  />
+                  &ltanimate
+                    attributeName="stroke-width"
+                    begin="1.5s"
+                    dur="3s"
+                    values="2;0"
+                    calcMode="linear"
+                    repeatCount="indefinite"
+                  />
+                &lt/circle>
+                &ltcircle cx="22" cy="22" r="6" stroke-opacity="0">
+                  &ltanimate
+                    attributeName="r"
+                    begin="3s"
+                    dur="3s"
+                    values="6;22"
+                    calcMode="linear"
+                    repeatCount="indefinite"
+                  />
+                  &ltanimate
+                    attributeName="stroke-opacity"
+                    begin="3s"
+                    dur="3s"
+                    values="1;0"
+                    calcMode="linear"
+                    repeatCount="indefinite"
+                  />
+                  &ltanimate
+                    attributeName="stroke-width"
+                    begin="3s"
+                    dur="3s"
+                    values="2;0"
+                    calcMode="linear"
+                    repeatCount="indefinite"
+                  />
+                &lt/circle>
+                &ltcircle cx="22" cy="22" r="8">
+                  &ltanimate
+                    attributeName="r"
+                    begin="0s"
+                    dur="1.5s"
+                    values="6;1;2;3;4;5;6"
+                    calcMode="linear"
+                    repeatCount="indefinite"
+                  />
+                &lt/circle>
+              &lt/g>
+            &lt/svg>
+          &lt/div>
+
+          // 
+
+          .spinner-container {
+            align-items: center;
+            background-color: black;
+            border-radius: 20px;
+            bottom: 15px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+            color: white;
+            display: flex;
+            padding: 5px 10px;
+            position: fixed;
+            right: 15px;
+          }
+          
+          span {
+            margin-left: 5px;
+          }
+          
+          
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 133 de 404 - Mostrar y ocultar el loadingSpinner</h2>
+        
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 134 de 404 - Debounce - Peticiones cuando el usuario deja de escribir</h2>
+        
+        <pre class="prettyprint">
+                
+            // search-box.component.ts
+
+            @Output()
+            public onDebounce = new EventEmitter<string>()
+          
+            ngOnInit(): void {
+                this.debouncer.pipe(
+                  debounceTime(300)
+                ).subscribe( value => {
+                  this.onDebounce.emit( value )
+                })
+            }
+          
+            search( value: string): void {
+              this.debouncer.next( value )
+            }
+
+            // 
+
+            &ltinput
+                type="text"
+                class="form-control"
+                [placeholder]="placeholder"
+                (keyup)="search( txtInput.value )"
+                #txtInput
+                >
+          
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 135 de 404 - Limpieza de suscripciones</h2>
+        <pre class="prettyprint">
+                
+            // search-box.component.ts
+
+            private debouncer: Subject<string> = new Subject<string>()
+            private debouncerSubscription?: Subscription
+            
+            ngOnInit(): void {
+                this.debouncerSubscription = this.debouncer.pipe(
+                    debounceTime(300)
+                ).subscribe( value => {
+                    this.onDebounce.emit( value )
+                })
+            }
+            
+            ngOnDestroy(): void {
+                this.debouncerSubscription?.unsubscribe()
+            }
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 136 de 404 - Buscar por region - Optimizacion</h2>
+        <pre class="prettyprint">
+
+            // by-region-page.component.ts
+                
+            type Region = 'Africa'|'Americas'|'Asia'|'Europe'|'Oceania'
+
+            ...
+
+            export class ByRegionPageComponent {
+              public countries: Country[] = []
+              public regions: Region[] = ['Africa', 'Americas', 'Asia', 'Europe', 'Oceania']
+              public selectedRegion?: Region
+            
+              ...
+            
+              searchByRegion( region: Region ): void {
+            
+                this.selectedRegion = region
+            
+                ...
+              }
+            }
+
+            // by-region-page.component.html
+
+            &ltbutton
+                *ngFor="let region of regions"
+                class="btn mx-2"
+                [ngClass]="{ 'btn-outline-primary': selectedRegion === region }"
+                (click)="searchByRegion( region )"
+                >
+                {{ region }}
+            &lt/button>
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 137 de 404 - Mantener la data entre pantallas</h2>
+        <pre class="prettyprint">
+                
+            // region.type.ts
+
+            export type Region = 'Africa'|'Americas'|'Asia'|'Europe'|'Oceania'|''
+
+            // cache-store.interface.ts
+
+            import { Country } from "./country"
+            import { Region } from "./region.type"
+            
+            export interface CacheStore {
+              byCapital: TermCountries,
+              byCountries: TermCountries,
+              byRegion: RegionCountries
+            }
+            
+            export interface TermCountries {
+              term: string,
+              countries: Country[]
+            }
+            
+            export interface RegionCountries {
+              region: Region,
+              countries: Country[]
+            }
+
+            // countries.service.ts
+
+            public cacheStore: CacheStore = {
+                byCapital: { term: '', countries: [] },
+                byCountries: { term: '', countries: [] },
+                byRegion: { region: '', countries: [] },
+            }
+            
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 138 de 404 - Mantener la data entre pantallas - Parte 2</h2>
+        <pre class="prettyprint">
+
+            // countries.service.ts
+                
+            getCapital(term: string): Observable&ltCountry[]> {
+                const url = `${this.apiUrl}/capital/${term}`;
+                return this.getCountriesRequest( url )
+                          .pipe(
+                            tap( countries => this.cacheStore.byCapital = { term, countries })
+                          )
+              }
+            
+              searchCountry(term: string): Observable&ltCountry[]> {
+                const url = `${this.apiUrl}/name/${term}`;
+                return this.getCountriesRequest( url )
+                          .pipe(
+                            tap( countries => this.cacheStore.byCountries = { term, countries })
+                          )
+              }
+            
+              searchRegion(region: Region): Observable&ltCountry[]> {
+                const url = `${this.apiUrl}/region/${region}`;
+                return this.getCountriesRequest( url )
+                          .pipe(
+                            tap( countries => this.cacheStore.byRegion = { region, countries })
+                          )
+              }
+
+              // by-capital-page.component.ts
+
+              ngOnInit(): void {
+                this.countries = this.countriesService.cacheStore.byCapital.countries
+                this.initialValue = this.countriesService.cacheStore.byCapital.term
+            }
+
+                // 
+
+                &ltshared-search-box
+                (onValue)="searchByCapital( $event )"
+                (onDebounce)="searchByCapital( $event )"
+                placeholder="Buscar por capital"
+                [initialValue]="initialValue">&lt/shared-search-box>
+                &lt/div>
+
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 139 de 404 - LocalStorage del Store</h2>
+
+        <pre class="prettyprint">
+                
+            // countries.service.ts
+
+              constructor(private http: HttpClient) {
+                this.loadFromLocalStorage();
+              }
+            
+              private saveToLocalStorage() {
+                localStorage.setItem('cacheStore', JSON.stringify(this.cacheStore));
+              }
+            
+              private loadFromLocalStorage() {
+                if (!localStorage.getItem('cacheStore')) return;
+            
+                this.cacheStore = JSON.parse(localStorage.getItem('cacheStore')!);
+              }
+            
+              ...
+            
+              getCapital(term: string): Observable&ltCountry[]> {
+                const url = `${this.apiUrl}/capital/${term}`;
+                return this.getCountriesRequest(url).pipe(
+                  tap((countries) => (this.cacheStore.byCapital = { term, countries })),
+                  tap(() => this.saveToLocalStorage())
+                );
+              }
+            
+              searchCountry(term: string): Observable&ltCountry[]> {
+                const url = `${this.apiUrl}/name/${term}`;
+                return this.getCountriesRequest(url).pipe(
+                  tap((countries) => (this.cacheStore.byCountries = { term, countries })),
+                  tap(() => this.saveToLocalStorage())
+                );
+              }
+            
+              searchRegion(region: Region): Observable&ltCountry[]> {
+                const url = `${this.apiUrl}/region/${region}`;
+                return this.getCountriesRequest(url).pipe(
+                  tap((countries) => (this.cacheStore.byRegion = { region, countries })),
+                  tap(() => this.saveToLocalStorage())
+                );
+              }
+
+        </pre>
+        
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 141 de 404 - Codigo fuente de la seccion</h2>
+        <a href="https://github.com/Klerith/angular-countries/tree/fin-secicon-10">https://github.com/Klerith/angular-countries/tree/fin-secicon-10</a>
+      </article>
+    </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</main>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</body>
+
+</html>

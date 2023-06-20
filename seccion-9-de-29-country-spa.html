@@ -406,6 +406,251 @@
           </article>
         </section>
 
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 121 de 404 - CatchError - Manejo de errores de observables</h2>
+            <pre class="prettyprint">
+
+              // countries.service.ts
+                    
+              getCapital(term: string): Observable<Country[]> {
+                const url = `${this.apiUrl}/capital/${term}`;
+                return this.http.get&ltCountry[]>(url).pipe(catchError(() => of([])));
+              }
+
+            </pre>
+          </article>
+        </section>
+
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 122 de 404 - Tarea - País y Región</h2>
+            <pre class="prettyprint">
+                    
+              // countries.service.ts
+
+              searchCountry(term: string): Observable&ltCountry[]> {
+                const url = `${this.apiUrl}/name/${term}`;
+                return this.http.get&ltCountry[]>(url).pipe(catchError(() => of([])));
+              }
+
+              searchRegion(term: string): Observable&ltCountry[]> {
+                const url = `${this.apiUrl}/region/${term}`;
+                return this.http.get&ltCountry[]>(url).pipe(catchError(() => of([])));
+              }
+
+              // by-country-page.component.ts
+
+              searchByCountry( term: string ): void {
+                this.countriesService.searchCountry( term )
+                  .subscribe({
+                    next: (response) => {
+                      this.countries = response
+                    }
+                  })
+              }
+
+              // by-country-page.component.html
+              
+              &ltdiv class="row">
+                &ltdiv class="col">
+                  &ltshared-search-box
+                    (onValue)="searchByCountry( $event )"
+                    placeholder="Buscar por País">&lt/shared-search-box>
+                &lt/div>
+              &lt/div>
+              
+              &ltdiv class="row">
+                &ltdiv class="col">
+                  &lthr>
+                  &ltcountries-table [countries]="countries">&lt/countries-table>
+                &lt/div>
+              &lt/div>
+              
+              // by-region-page.component.ts
+
+              searchByRegion( term: string ): void {
+                this.countriesService.searchRegion( term )
+                  .subscribe({
+                    next: (response) => {
+                      this.countries = response
+                    }
+                  })
+              }
+
+              // by-region-page.component.html
+
+              &ltdiv class="row">
+                &ltdiv class="col">
+                  &ltshared-search-box
+                    (onValue)="searchByRegion( $event )"
+                    placeholder="Buscar por Región">&lt/shared-search-box>
+                &lt/div>
+              &lt/div>
+              
+              &ltdiv class="row">
+                &ltdiv class="col">
+                  &lthr>
+                  &ltcountries-table [countries]="countries">&lt/countries-table>
+                &lt/div>
+              &lt/div>
+            </pre>
+          </article>
+        </section>
+
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 123 de 404 - Argumentos por URL - Página de País</h2>
+            <pre class="prettyprint">
+                    
+              // countries.service.ts
+
+              searchCountryByAlphaCode(code: string): Observable<Country[]> {
+                const url = `${this.apiUrl}/alpha/${code}`;
+                return this.http.get<Country[]>(url).pipe(catchError(() => of([])));
+              }
+
+              // country-page.component.ts
+
+              ngOnInit(): void {
+                this.activatedRoute.params.subscribe(({ id }) => {
+                  console.log({ params: id })
+                  this.countriesService.searchCountryByAlphaCode( id )
+                    .subscribe({
+                      next: (response) => {
+                        console.log({ response })
+                        this.country = response[0]
+                        console.log({ country: this.country })
+                      }
+                    })
+                })
+              }
+
+            </pre>
+          </article>
+        </section>
+
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 124 de 404 - switchMap - Refactorización</h2>
+            <pre class="prettyprint">
+                    
+              // country-page.component.ts
+
+              ngOnInit(): void {
+                this.activatedRoute.params
+                  .pipe(
+                    switchMap( ({ id }) => this.countriesService.searchCountryByAlphaCode( id ))
+                  )
+                  .subscribe( country => {
+                    if (!country) {
+                      return this.router.navigateByUrl('')
+                    }
+                    this.country = country
+                    console.log({ country })
+                    return
+                  })
+              }
+
+              // countries.service.ts
+
+              searchCountryByAlphaCode(code: string): Observable&ltCountry | null> {
+                const url = `${this.apiUrl}/alpha/${code}`;
+                return this.http.get&ltCountry[]>(url).pipe(
+                  map( countries => countries.length > 0 ? countries[0] : null ),
+                  catchError(() => of(null))
+                );
+              }
+            </pre>
+          </article>
+        </section>
+
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 125 de 404 - Mostrar información del país</h2>
+            <pre class="prettyprint">
+                    
+              &ltng-template #loading>
+              &ltdiv class="alert alert-info text-center">Espere por favor&lt/div>
+            &lt/ng-template>
+            
+            &ltdiv *ngIf="country; else loading">
+              &ltdiv class="row">
+                &ltdiv class="col-12">
+                  &lth2>
+                    País: &ltstrong>{{ country.name.common }}&lt/strong>
+                  &lt/h2>
+                  &lthr />
+                &lt/div>
+              &lt/div>
+            
+              &ltdiv class="row">
+                &ltdiv class="col-4">
+                  &lth3>Bandera&lt/h3>
+                  &ltimg [src]="country.flags.svg" [alt]="country.name.common" class="img-thumbnail">
+                &lt/div>
+                &ltdiv class="col">
+                  &lth3>Información&lt/h3>
+                  &ltul class="list-group">
+                    &ltli class="list-group-item">
+                      &ltstrong>Población: &lt/strong> {{ country.population | number }}
+                    &lt/li>
+                    &ltli class="list-group-item">
+                      &ltstrong>Código: &lt/strong> {{ country.population | number }}
+                    &lt/li>
+                  &lt/ul>
+                &lt/div>
+              &lt/div>
+            
+              &ltdiv class="row mt-2">
+                &ltdiv class="col">
+                  &lth3>Traducciones&lt/h3>
+            
+                  &ltdiv class="d-flex flex-wrap">
+            
+            
+                  &lt/div>
+                &lt/div>
+              &lt/div>
+            &lt/div>
+            
+            </pre>
+          </article>
+        </section>
+
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 126 de 404 - Navegar hacia la página de pais</h2>
+            <pre class="prettyprint">
+                    
+              &lttd>&lta [routerLink]="['/countries/by/', country.cca3]">Ver más&lt/a>&lt/td>
+            </pre>
+          </article>
+        </section>
+
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 127 de 404 - Código fuente de la sección</h2>
+
+            <a href="https://github.com/Klerith/angular-countries/tree/fin-seccion-9">https://github.com/Klerith/angular-countries/tree/fin-seccion-9</a>
+            
+          </article>
+        </section>
+
 
 
 
