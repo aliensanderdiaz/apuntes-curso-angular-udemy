@@ -59,8 +59,220 @@
     
     <section class="row">
       <article class="col">
-        <h2>Sección 167 de 404 - ToogleCasePipe - Piper Personalizado</h2>
+        <h2>Sección 167 de 404 - ToogleCasePipe - Pipe Personalizado</h2>
+        <pre class="prettyprint">
+                
+          // pipes/toggle-case.pipe.ts
+
+          import { Pipe, PipeTransform } from '@angular/core';
+
+          @Pipe({
+            name: 'toggleCase',
+          })
+          export class ToggleCasePipe implements PipeTransform {
+            transform(value: string): string {
+              return value.toUpperCase();
+            }
+          }
+          
+          // products.module.ts
+
+          declarations: [
+            ...
+            ToggleCasePipe
+          ],
+
+          // order.component.html
+
+          {{ 'hola' | toggleCase }}
+
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 168 de 404 - Valores y argumentos personalizados al Pipe</h2>
+        <pre class="prettyprint">
+                
+          // 
+
+          transform(value: string, toUpper: boolean = false): string {
+            return toUpper ? value.toUpperCase() : value.toLowerCase();
+          }
+
+          //
+
+          {{ 'hola' | toggleCase }}
+          {{ 'hola' | toggleCase:true }}
+        </pre>
+
+        <pre class="prettyprint">
+                
+          // 
+
+          &ltp-toolbar>
+            &ltdiv class="p-toolbar-group-start">
+              &ltp-button label="ToggleCase" icon="pi pi-search" class="mr-2">&lt/p-button>
+            &lt/div>
+            &ltdiv class="p-toolbar-group-end">
+              &ltp-button
+                label="Por nombre"
+                icon="pi pi-sort"
+                styleClass="p-button-success mr-2"
+              >&lt/p-button>
+              &ltp-button
+                label="Por volar"
+                icon="pi pi-sort"
+                styleClass="p-button-danger mr-2"
+              >&lt/p-button>
+              &ltp-button
+                label="Por color"
+                icon="pi pi-sort"
+                styleClass="p-button-help"
+              >&lt/p-button>
+            &lt/div>
+          &lt/p-toolbar>
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 169 de 404 - Argumentos dinámicos a pipes personalizados</h2>
+        <pre class="prettyprint">
+                
+          // 
+
+          &ltp>Pipes personalizados - creados por {{ 'nosotros' | toggleCase:isUpperCase }}.&lt/p>
+
+          &ltp-button label="ToggleCase" icon="pi pi-search" class="mr-2" (onClick)="toggleUpperCase()">&lt/p-button>
+
+          // 
+
+          public isUpperCase: boolean = false
+
+          toggleUpperCase():void {
+            this.isUpperCase = !this.isUpperCase
+          }
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 170 de 404 - PrimeNG - Table</h2>
+        <pre class="prettyprint">
+                
+          &ltdiv class="grid">
+          &ltdiv class="col mt-2">
+            &ltp-panel header="Héroes">
+              &ltp-table [value]="heroes" [tableStyle]="{ 'min-width': '50rem' }">
+                &ltng-template pTemplate="header">
+                  &lttr>
+                    &ltth>Nombre&lt/th>
+                    &ltth>Vuela&lt/th>
+                    &ltth>Color&lt/th>
+                  &lt/tr>
+                &lt/ng-template>
+                &ltng-template pTemplate="body" let-hero>
+                  &lttr>
+                    &lttd>{{ hero.name }}&lt/td>
+                    &lttd>{{ hero.canFly }}&lt/td>
+                    &lttd>{{ hero.color }}&lt/td>
+                  &lt/tr>
+                &lt/ng-template>
+              &lt/p-table>
+            &lt/p-panel>
+          &lt/div>
+        &lt/div>
+        </pre>
+
+        <pre class="prettyprint">
+                
+          public heroes: Hero[] = [
+          {
+            name: 'Superman',
+            canFly: true,
+            color: Color.blue
+          },
+          {
+            name: 'Batman',
+            canFly: false,
+            color: Color.black
+          },
+          {
+            name: 'Daredevil',
+            canFly: false,
+            color: Color.red
+          },
+          {
+            name: 'Robin',
+            canFly: false,
+            color: Color.red
+          },
+          {
+            name: 'Linterna Verde',
+            canFly: true,
+            color: Color.green
+          },
+        ];
+
+
+        //
+
+        export enum Color {
+          red, black, blue, green
+        }
         
+        export interface Hero {
+          name: string
+          canFly: boolean
+          color: Color
+        }
+        
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 171 de 404 - Tarea - CanFly Pipe</h2>
+        <pre class="prettyprint">
+                
+          @Pipe({
+            name: 'canFly',
+          })
+          export class CanFlyPipe implements PipeTransform {
+            transform(value: boolean): 'vuela' | 'no vuela' {
+              return value ? 'vuela' : 'no vuela';
+            }
+          }
+
+          // 
+
+          {{ hero.canFly | canFly | titlecase }}
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 172 de 404 - sortBy - Pipe Personalizado</h2>
+        <pre class="prettyprint">
+                
+          > ng g pipe products/pipes/sortBy --flat --skip-tests
+        </pre>
       </article>
     </section>
 
