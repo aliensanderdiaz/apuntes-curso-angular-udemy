@@ -273,6 +273,86 @@
                 
           > ng g pipe products/pipes/sortBy --flat --skip-tests
         </pre>
+
+        <pre class="prettyprint">
+                
+          transform(heroes: Hero[], sortBy?: keyof Hero | ''): Hero[] {
+            switch (sortBy) {
+              case 'name':
+                return heroes.sort((a, b) => (a.name > b.name ? 1 : -1));
+
+              case 'canFly':
+                return heroes.sort((a, b) => (a.canFly > b.canFly ? 1 : -1));
+
+              case 'color':
+                return heroes.sort((a, b) => (a.color > b.color ? 1 : -1));
+
+              default:
+                return heroes;
+            }
+          }
+        </pre>
+
+        <pre class="prettyprint">
+                
+          &ltp-table [value]="heroes | sortBy:'canFly'"
+
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 173 de 404 - Ordenar tabla por nombre, vuela, color</h2>
+        <pre class="prettyprint">
+                
+          public orderBy?: keyof Hero
+
+          ...
+
+          changeOrder( value: keyof Hero ) {
+            this.orderBy = value
+          }
+        </pre>
+
+        <pre class="prettyprint">
+                
+          &ltp-button
+            (onClick)="changeOrder('name')"
+            label="Por nombre"
+            icon="pi pi-sort"
+            styleClass="p-button-success mr-2"
+          >&lt/p-button>
+          &ltp-button
+            (onClick)="changeOrder('canFly')"
+            label="Por volar"
+            icon="pi pi-sort"
+            styleClass="p-button-danger mr-2"
+          >&lt/p-button>
+          &ltp-button
+            (onClick)="changeOrder('color')"
+            label="Por color"
+            icon="pi pi-sort"
+            styleClass="p-button-help"
+          >&lt/p-button>
+      
+          ...
+      
+          &ltp-table [value]="heroes | sortBy:orderBy" [tableStyle]="{ 'min-width': '50rem' }">
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 174 de 404 - Código fuente de la Sección</h2>
+        <p>
+          <a href="https://github.com/Klerith/angular-pipe-app/tree/fin-seccion-12">https://github.com/Klerith/angular-pipe-app/tree/fin-seccion-12</a>
+        </p>
       </article>
     </section>
 

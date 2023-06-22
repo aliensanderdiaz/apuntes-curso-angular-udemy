@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+    <title>Sección 13 de 29 - Rutas Hijas y LazyLoading</title>
+  </head>
+
+  <body>
+    <header class="text-center">
+      <h1>Sección 13 de 29 - Rutas Hijas y LazyLoading</h1>
+    </header>
+    <main class="container">
+      <hr />
+      <div class="row">
+        <div class="col">
+          <div class="list-group">
+            <a
+              href="./index.html"
+              class="list-group-item list-group-item-action"
+            >
+              Volver
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <hr />
+
+      <section class="row">
+        <article class="col">
+          <h2>Sección 175 de 404 - Introducción a la Sección</h2>
+        </article>
+      </section>
+
+      <hr />
+
+      <section class="row">
+        <article class="col">
+          <h2>Sección 176 de 404 - Temas puntuales de la Sección</h2>
+        </article>
+      </section>
+
+      <hr />
+
+      <section class="row">
+        <article class="col">
+          <h2>Sección 177 de 404 - Demostración del objetivo de la sección</h2>
+        </article>
+      </section>
+
+      <hr />
+
+      <section class="row">
+        <article class="col">
+          <h2>Sección 178 de 404 - Inicio del proyecto HeroesApp</h2>
+          <pre class="prettyprint">
+                
+            > ng new heroesApp
+        </pre
+          >
+        </article>
+      </section>
+
+      <hr />
+
+      <section class="row">
+        <article class="col">
+          <h2>Sección 179 de 404 - Creación de componentes - Pages</h2>
+          <pre class="prettyprint">
+                
+            > ng g m auth
+            > ng g m shared
+            > ng g m material
+            > ng g m heroes --routing
+
+            > ng g c auth/pages/layoutPage --inline-style --skip-tests
+            > ng g c auth/pages/loginPage --inline-style --skip-tests
+            > ng g c auth/pages/registerPage --inline-style --skip-tests
+
+            > ng g c heroes/pages/heroPage --inline-style --skip-tests
+            > ng g c heroes/pages/layoutPage --inline-style --skip-tests
+            > ng g c heroes/pages/listPage --inline-style --skip-tests
+            > ng g c heroes/pages/newPage --inline-style --skip-tests
+            > ng g c heroes/pages/searchPage --inline-style --skip-tests
+
+            > ng g c shared/pages/Error404Page --inline-style --skip-tests
+        </pre
+          >
+        </article>
+      </section>
+
+      <hr />
+
+      <section class="row">
+        <article class="col">
+          <h2>Sección 180 de 404 - Rutas Hijas y LAzyLoad</h2>
+          <pre class="prettyprint">
+                
+            // auth-routing
+
+            const routes: Routes = [
+                {
+                    path: '',
+                    component: LayoutPageComponent
+                }
+            ];
+
+            // heroes-routing
+
+            const routes: Routes = [
+                {
+                    path: '',
+                    component: LayoutPageComponent,
+                    children: [
+                        {
+                            path: 'new-hero', component: NewPageComponent
+                        }
+                    ]
+                }
+            ];
+
+            // app-routing
+
+            const routes: Routes = [
+              {
+                path: 'auth',
+                loadChildren: () => import('./auth/auth.module').then( m => m.AuthModule)
+              },
+              {
+                path: 'heroes',
+                loadChildren: () => import('./heroes/heroes.module').then( m => m.HeroesModule)
+              },
+              {
+                path: '404',
+                component: Error404PageComponent
+              },
+              {
+                path: '',
+                redirectTo: 'heroes',
+                pathMatch: 'full'
+              },
+              {
+                path: '**',
+                redirectTo: '404',
+              },
+            ]
+        </pre
+          >
+        </article>
+      </section>
+
+      <hr />
+
+      <section class="row">
+        <article class="col">
+          <h2>Sección 181 de 404 - Paths de las rutas faltantes</h2>
+          <pre class="prettyprint">
+                
+          // heroes-routing
+
+          const routes: Routes = [
+            {
+              path: '',
+              component: LayoutPageComponent,
+              children: [
+                { path: 'new-hero', component: NewPageComponent },
+                { path: 'search', component: SearchPageComponent },
+                { path: 'edit/:id', component: NewPageComponent },
+                { path: 'list', component: ListPageComponent },
+                { path: ':id', component: HeroPageComponent },
+                { path: '**', redirectTo: 'list' },
+              ],
+            },
+          ];
+
+          // auth-routing
+
+          const routes: Routes = [
+            {
+              path: '',
+              component: LayoutPageComponent,
+              children: [
+                { path: 'login', component: LoginPageComponent },
+                { path: 'new-account', component: RegisterPageComponent },
+                { path: '**', redirectTo: 'list' },
+              ],
+            }
+          ];
+        </pre
+          >
+        </article>
+      </section>
+
+      <hr />
+
+      <section class="row">
+        <article class="col">
+          <h2>Sección 182 de 404 - Codigo fuente de la seccion</h2>
+          <p>
+            <a
+              href="https://github.com/Klerith/angular-heroes-app/tree/fin-seccion-13"
+              >https://github.com/Klerith/angular-heroes-app/tree/fin-seccion-13</a
+            >
+          </p>
+        </article>
+      </section>
+    </main>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
