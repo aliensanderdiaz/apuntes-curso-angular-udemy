@@ -82,9 +82,270 @@
     <section class="row">
       <article class="col">
         <h2>Sección 188 de 404 - Diseño de Login y Auth Layout</h2>
+        <pre class="prettyprint">
         
+          &ltdiv class="flex flex-column">
+          &ltdiv class="text-lg mb-4">Login&lt/div>
+        
+          &ltmat-form-field>
+            &ltmat-label>Usuario&lt/mat-label>
+            &ltinput type="text" matInput placeholder="Nombre de usuario">
+          &lt/mat-form-field>
+        
+          &ltmat-form-field>
+            &ltmat-label>Constraseña&lt/mat-label>
+            &ltinput type="password" matInput placeholder="Constraseña">
+          &lt/mat-form-field>
+        
+          &ltbutton mat-button mat-flat-button color="primary">
+            &ltmat-icon>save&lt/mat-icon>
+            Ingresar
+          &lt/button>
+        
+          &ltdiv class="flex justify-content-end mt-5">
+            &lta routerLink="/auth/new-account">¿Aún no tienes cuenta?&lt/a>
+          &lt/div>
+        &lt/div>
+        
+        </pre>
+
+        <pre class="prettyprint">
+        
+          &ltdiv class="flex flex-column">
+          &ltdiv class="text-lg mb-4">Registro&lt/div>
+        
+          &ltmat-form-field>
+            &ltmat-label>Usuario&lt/mat-label>
+            &ltinput type="text" matInput placeholder="Nombre de usuario">
+          &lt/mat-form-field>
+        
+          &ltmat-form-field>
+            &ltmat-label>Nombre&lt/mat-label>
+            &ltinput type="text" matInput placeholder="Nombre de usuario">
+          &lt/mat-form-field>
+        
+          &ltmat-form-field>
+            &ltmat-label>Constraseña&lt/mat-label>
+            &ltinput type="password" matInput placeholder="Constraseña">
+          &lt/mat-form-field>
+        
+          &ltbutton mat-button mat-flat-button color="primary">
+            &ltmat-icon>save&lt/mat-icon>
+            Ingresar
+          &lt/button>
+        
+          &ltdiv class="flex justify-content-end mt-5">
+            &lta routerLink="/auth/login">¿Ya tienes cuenta?&lt/a>
+          &lt/div>
+        &lt/div>
+        
+        </pre>
       </article>
     </section>
+
+    <section class="container">
+        <h3>Sección 189 de 404 - Material Sidenav, Toolbar e iconos</h3>
+        <pre class="prettyprint">
+        
+        public sidebarItems = [
+          { label: 'Listado', icon: 'label', url: './list' },
+          { label: 'Añadir', icon: 'add', url: './new-hero' },
+          { label: 'Buscar', icon: 'search', url: './search' },
+        ]
+        </pre>
+
+        <pre class="prettyprint">
+        
+          &ltmat-sidenav-container fullscreen>
+
+          &ltmat-sidenav #sidenav mode="push" [ngStyle]="{ width: '250px' }">
+            &ltmat-toolbar>
+              &ltspan>Menú&lt/span>
+              &ltspan class="spacer">&lt/span>
+              &ltbutton mat-icon-button (click)="sidenav.toggle()">
+                &ltmat-icon>menu&lt/mat-icon>
+              &lt/button>
+            &lt/mat-toolbar>
+        
+            &ltmat-nav-list>
+              &ltmat-list-item
+                *ngFor="let item of sidebarItems"
+                [routerLink]="item.url"
+                (click)="sidenav.toggle()"
+              >
+              &ltmat-icon matListItemIcon>{{ item.icon }}&lt/mat-icon>
+              {{ item.label }}
+            &lt/mat-list-item>
+            &lt/mat-nav-list>
+          &lt/mat-sidenav>
+        
+          &ltmat-toolbar color="primary">
+            &ltbutton mat-icon-button (click)="sidenav.toggle()">
+              &ltmat-icon>menu&lt/mat-icon>
+            &lt/button>
+        
+            &ltspan class="spacer">&lt/span>
+        
+            &ltbutton mat-button>
+              Logout
+            &lt/button>
+          &lt/mat-toolbar>
+        
+          &ltdiv class="container">
+            &ltrouter-outlet>&lt/router-outlet>
+          &lt/div>
+        &lt/mat-sidenav-container>
+        
+        </pre>
+    </section>
+    <hr>
+
+    <section class="container">
+        <h3>Sección 190 de 404 - HEroes Backend - json-server</h3>
+        <p>
+          <a href="https://gist.githubusercontent.com/Klerith/e09f16f2ae9f6c9ebce6c648fc136072/raw/b20dfde3a88e31b3acd456f92bc856ce311041cb/db.json">db.json</a>
+          <br>
+          <a href="https://github.com/typicode/json-server">json-server</a>
+        </p>
+    </section>
+    <hr>
+
+    <section class="container">
+        <h3>Sección 191 de 404 - Variables de entorno - angular 15+</h3>
+        <p>Ahora toca crearlos manualmente y registrarlos en el angular.json</p>
+        <pre class="prettyprint">
+        
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environments.ts",
+                  "with": "src/environments/environments.prod.ts"
+                }
+              ],
+        </pre>
+    </section>
+    <hr>
+
+    <section class="container">
+        <h3>Sección 192 de 404 - HeroesService - Traer información de los héroes</h3>
+        <p>Crear las interfaces</p>
+        <pre>
+          > ng g s heroes/services/heroes
+        </pre>
+
+        <pre class="prettyprint">
+        
+          private baseUrl: string = environments.baseUrl
+
+          constructor(
+            private http: HttpClient
+          ) { }
+        
+          getHeroes(): Observable<Hero[]> {
+            return this.http.get<Hero[]>(`${ this.baseUrl }/heroes`)
+          }
+        </pre>
+
+        <pre class="prettyprint">
+        
+          public heroes: Hero[] = []
+
+          constructor(
+            private heroesService: HeroesService
+          ) {}
+        
+          ngOnInit(): void {
+            this.heroesService.getHeroes()
+              .subscribe( heroes => this.heroes = heroes )
+          }
+        </pre>
+    </section>
+    <hr>
+
+    <section class="container">
+        <h3>Sección 193 de 404 - Mostrar listado de Héroes</h3>
+        <pre class="prettyprint">
+        
+            > ng g c heroes/components/card
+        </pre>
+
+        <pre class="prettyprint">
+        
+          @Input()
+          public hero!: Hero
+        
+          ngOnInit(): void {
+            if (!this.hero) throw Error('Hero property is required')
+          }
+        </pre>
+
+        <pre class="prettyprint">
+        
+          &ltmat-card>
+          &ltmat-card-header>
+            &ltmat-card-title>{{ hero.superhero }}&lt/mat-card-title>
+            &ltmat-card-subtitle>{{ hero.alter_ego }}&lt/mat-card-subtitle>
+          &lt/mat-card-header>
+        
+          &lt!-- TODO: image -->
+          &ltmat-card-content class="mt-2">
+            &lth4>{{ hero.publisher }}&lt/h4>
+            &ltp>
+              &ltstrong>Primera aparición&lt/strong> {{ hero.first_appearance }}
+              &ltbr>
+              &ltmat-chip-listbox>
+                &ltmat-chip *ngFor="let character of hero.characters.split(', ') | slice:0:3">
+                  {{ character }}
+                &lt/mat-chip>
+              &lt/mat-chip-listbox>
+            &lt/p>
+          &lt/mat-card-content>
+        
+          &ltmat-divider>&lt/mat-divider>
+        
+          &ltmat-card-actions>
+            &ltbutton mat-button mat-raised color="primary" [routerLink]="['/heroes/edit', hero.id]">
+              &ltmat-icon>edit&lt/mat-icon>
+              Editar
+            &lt/button>
+        
+            &ltspan class="spacer">&lt/span>
+        
+            &ltbutton mat-button mat-raised [routerLink]="['/heroes', hero.id]">
+              &ltmat-icon>more-horiz&lt/mat-icon>
+              Más
+            &lt/button>
+        
+        
+          &lt/mat-card-actions>
+        &lt/mat-card>        
+        </pre>
+
+        <pre class="prettyprint">
+        
+          &lth1>Listado de Heroes&lt/h1>
+
+          &ltmat-divider>&lt/mat-divider>
+          
+          &ltdiv class="grid bm-8 pt-2">
+          
+            &ltdiv
+              *ngFor="let hero of heroes"
+              class="col-12 sm:col-4 md:col-3 xl:col-2">
+              &ltheroes-hero-card [hero]="hero">&lt/heroes-hero-card>
+            &lt/div>
+          &lt/div>
+          
+        </pre>
+    </section>
+    <hr>
+
+    <section class="container">
+        <h3>Sección 194 de 404 - HeroImage Pipe</h3>
+        
+    </section>
+    <hr>
 
 
 
