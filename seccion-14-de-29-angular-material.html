@@ -343,9 +343,143 @@
 
     <section class="container">
         <h3>Sección 194 de 404 - HeroImage Pipe</h3>
+        <pre class="prettyprint">
+                
+          > ng g pipe heroes/pipes/heroImage
+        </pre>
+
+        <pre class="prettyprint">
+                
+          transform(hero: Hero): string {
+            if ( !hero.id && !hero.alt_img) {
+              return 'assets/no-image.png';
+            }
         
+            if (hero.alt_img) return hero.alt_img
+        
+            return `assets/heroes/${ hero.id }.jpg`
+          }
+        </pre>
+
+        <pre class="prettyprint">
+                
+          &ltimg mat-card-image [src]="hero | heroImage" [alt]="hero.superhero">
+        </pre>
     </section>
     <hr>
+
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 195 de 404 - Obtener Heroe por URL</h2>
+        <pre class="prettyprint">
+                
+          getHeroeById(id: string): Observable<Hero | undefined> {
+            return this.http.get<Hero>(`${ this.baseUrl }/heroes/${ id }`)
+              .pipe(
+                catchError( error => of(undefined))
+              )
+          }
+        </pre>
+
+        <pre class="prettyprint">
+                
+          public hero?: Hero
+
+          constructor(
+            private heroesService: HeroesService,
+            private activatedRoute: ActivatedRoute,
+            private router: Router
+          ) {}
+        
+          ngOnInit() {
+            this.activatedRoute.params
+              .pipe(
+                switchMap( ({ id }) => this.heroesService.getHeroeById( id ))
+              )
+              .subscribe( hero => {
+                if (!hero) return this.router.navigate([ '/heroes/list' ])
+                this.hero = hero
+                console.log({ hero })
+                return
+              })
+          }
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 196 de 404 - Página del Heroe</h2>
+        <pre class="prettyprint">
+                
+          &ltng-template #divLoading>
+          &ltmat-grid-list cols="1">
+            &ltmat-grid-tile>
+              &ltmat-spinner>&lt/mat-spinner>
+            &lt/mat-grid-tile>
+          &lt/mat-grid-list>
+        &lt/ng-template>
+        
+        &ltdiv *ngIf="hero; else divLoading" class="grid p-2">
+          &ltmat-card class="col-12 sm:col-6">
+            &ltmat-card-header>
+              &ltmat-card-title>{{ hero.alter_ego }}&lt/mat-card-title>
+              &ltmat-card-subtitle>{{ hero.superhero }}&lt/mat-card-subtitle>
+            &lt/mat-card-header>
+        
+            &ltimg [src]="hero | heroImage" [alt]="hero.superhero" mat-card-image />
+          &lt/mat-card>
+        
+          &ltmat-card class="col-12 sm:col-6">
+            &ltmat-card-header>
+              &ltmat-card-title>Información&lt/mat-card-title>
+              &ltmat-card-subtitle>{{ hero.superhero }}&lt/mat-card-subtitle>
+            &lt/mat-card-header>
+        
+            &ltmat-card-content>
+              &ltmat-list>
+                &ltmat-list-item>{{ hero.first_appearance }}&lt/mat-list-item>
+                &ltmat-list-item>{{ hero.characters }}&lt/mat-list-item>
+                &ltmat-list-item>{{ hero.publisher }}&lt/mat-list-item>
+                &ltmat-list-item>{{ hero.alter_ego }}&lt/mat-list-item>
+              &lt/mat-list>
+        
+              &ltbutton
+                mat-button
+                color="warn"
+                (click)="goBack()"
+              >
+                Regresar
+              &lt/button>
+            &lt/mat-card-content>
+          &lt/mat-card>
+        &lt/div>
+        
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 197 de 404 - Angular Material Autocomplete</h2>
+        <pre class="prettyprint">
+                
+          getSuggestions(query: string): Observable<Hero[]> {
+            return this.http.get<Hero[]>(`${ this.baseUrl }/heroes?q=${ query }&limit=6`)
+          }
+        </pre>
+
+        <pre class="prettyprint">
+                
+        
+        </pre>
+      </article>
+    </section>
 
 
 
