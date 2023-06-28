@@ -476,10 +476,209 @@
 
         <pre class="prettyprint">
                 
+          &ltdiv class="flex flex-column p-2">
+
+          &lth3>Buscador&lt/h3>
+        
+          &ltmat-form-field>
+            &ltmat-label>Buscador de héroes&lt/mat-label>
+            &ltinput type="text" matInput [formControl]="searchInput">
+          &lt/mat-form-field>
+        
+        &lt/div>
         
         </pre>
+
+        <pre class="prettyprint">
+        
+          public searchInput = new FormControl('')
+        </pre>
+
+        <p>NOTE: Import ReactiveFormsModule</p>
       </article>
     </section>
+
+    <hr>
+    <section class="container">
+      <h3>Sección 198 de 404 - Angular Material - Autocomplete parte 2</h3>
+      <pre class="prettyprint">
+      
+        &ltdiv class="flex flex-column p-2">
+
+        &lth3>Buscador&lt/h3>
+      
+        &ltmat-form-field>
+          &ltmat-label>Buscador de héroes&lt/mat-label>
+          &ltinput type="text" matInput [formControl]="searchInput" (input)="searchHero()" [matAutocomplete]="auto">
+        &lt/mat-form-field>
+      
+        &ltmat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onSelectedOption( $event )">
+          &ltmat-option *ngFor="let hero of heroes" [value]="hero">
+            {{ hero.superhero }}
+          &lt/mat-option>
+      
+          &ltmat-option
+          *ngIf="heroes.length === 0 && searchInput.value && searchInput.value.length > 0"
+          value="">
+            No se encontró nada con el término {{ searchInput.value }}
+          &lt/mat-option>
+        &lt/mat-autocomplete>
+      
+        {{ selectedHero | json }}
+      
+      &lt/div>
+      
+      </pre>
+
+      <pre class="prettyprint">
+      
+        public searchInput = new FormControl('')
+        public heroes: Hero[] = []
+        public selectedHero?: Hero;
+      
+        constructor(
+          private heroesService: HeroesService
+        ) { }
+      
+        searchHero() {
+          const value: string = this.searchInput.value || ''
+          this.heroesService.getSuggestions(value)
+            .subscribe(heroes => this.heroes = heroes)
+        }
+      
+        onSelectedOption(event: MatAutocompleteSelectedEvent) {
+          if (!event.option.value) {
+            this.selectedHero = undefined
+            return
+          }
+      
+          const hero: Hero = event.option.value
+          this.searchInput.setValue( hero.superhero )
+      
+          this.selectedHero = hero
+      
+        }
+      </pre>
+    </section>
+    <hr>
+
+    <section class="container">
+        <h3>Sección 199 de 404 - Agregar Héroe - HTML</h3>
+        <pre class="prettyprint">
+        
+          &lth1>
+          Editar / Agregar
+          héroe
+          &ltsmall>Superman&lt/small>
+        &lt/h1>
+        
+        &ltmat-divider class="mb-2">&lt/mat-divider>
+        
+        &ltdiv class="grid">
+        
+          &ltdiv class="col-12 sm:col-6">
+            &ltmat-card>
+              &ltmat-card-content>
+        
+                &ltdiv class="grid">
+        
+                  &ltmat-form-field class="col-12 sm:col-6">
+                    &ltmat-label>Super héroe&lt/mat-label>
+                    &ltinput
+                      matInput
+                      type="text"
+                      required
+                    />
+                  &lt/mat-form-field>
+        
+                  &ltmat-form-field class="col-12 sm:col-6">
+                    &ltmat-label>Alter ego&lt/mat-label>
+                    &ltinput
+                      matInput
+                      type="text"
+                      required
+                    />
+                  &lt/mat-form-field>
+        
+        
+                  &ltmat-form-field class="col-12">
+                    &ltmat-label>Primera aparición&lt/mat-label>
+                    &ltinput
+                      matInput
+                      type="text"
+                      required
+                    />
+                  &lt/mat-form-field>
+        
+                  &ltmat-form-field class="col-12">
+                    &ltmat-label>Personajes&lt/mat-label>
+                    &ltinput
+                      matInput
+                      type="text"
+                      required
+                    />
+                  &lt/mat-form-field>
+        
+                  &ltmat-form-field class="col-12">
+                    &ltmat-label>Creador&lt/mat-label>
+                    &ltmat-select required="">
+                      &ltmat-option *ngFor="let publisher of publishers"
+                        [value]="publisher.id">
+                        {{ publisher.desc }}
+                      &lt/mat-option>
+                    &lt/mat-select>
+                  &lt/mat-form-field>
+                &lt/div>
+        
+                &ltdiv class="flex justify-content-between">
+                  &ltbutton
+                    mat-flat-button
+                    color="warn"
+                  >
+                    Borrar
+                  &lt/button>
+        
+                  &ltbutton
+                    mat-flat-button
+                    color="primary"
+                  >
+                    &ltmat-icon>save&lt/mat-icon>
+                    Guardar
+                  &lt/button>
+                &lt/div>
+        
+              &lt/mat-card-content>
+            &lt/mat-card>
+          &lt/div>
+        
+          &ltdiv class="col-12 sm:col-6">
+        
+            &ltmat-card>
+              &ltimg src="" alt="imagen del héroe" mat-card-image>
+            &lt/mat-card>
+        
+          &lt/div>
+        &lt/div>
+        
+        
+        </pre>
+        <pre class="prettyprint">
+        
+        public publishers = [
+          { id: 'DC Comics', desc: 'DC - Comics' },
+          { id: 'Marvel Comics', desc: 'Marvel - Comics' },
+        ];
+        </pre>
+    </section>
+    <hr>
+
+    <section class="container">
+        <h3>Sección 200 de 404 - Código fuente de la sección</h3>
+        <p>
+          <a href="https://github.com/Klerith/angular-heroes-app/tree/fin-seccion-14">https://github.com/Klerith/angular-heroes-app/tree/fin-seccion-14</a>
+        </p>
+    </section>
+    <hr>
 
 
 
