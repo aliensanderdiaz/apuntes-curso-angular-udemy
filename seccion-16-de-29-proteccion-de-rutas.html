@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sección 16 de 29 - Protección de Rutas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+</head>
+
+<body>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col">
+                <h1>Sección 16 de 29 - Protección de Rutas</h1>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="col">
+              <div class="list-group">
+                <a href="./index.html" class="list-group-item list-group-item-action">
+                  Volver
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <hr>
+
+          <section class="container">
+              <h3>Sección 215 de 404 - Introducción a la sección</h3>
+              
+          </section>
+          <hr>
+
+          <section class="container">
+              <h3>Sección 216 de 404 - Temas puntuales de la sección</h3>
+              
+          </section>
+          <hr>
+
+          <section class="container">
+              <h3>Sección 217 de 404 - Continuación de la aplicación</h3>
+              
+          </section>
+          <hr>
+
+          <section class="container">
+              <h3>Sección 218 de 404 - AuthService - Servicio de autenticación</h3>
+              <pre class="prettyprint">
+              
+                  > ng g service auth/services/auth
+                  > ng g interface auth/interfaces/user
+              </pre>
+
+              <pre class="prettyprint">
+              
+                private baseUrl = environments.baseUrl
+                private user?: User
+              
+                constructor(
+                  private http: HttpClient
+                ) { }
+              
+                get currentUser(): User|undefined {
+                  if (!this.user) return undefined
+                  return structuredClone(this.user)
+                }
+              
+                login(email: string, password: string): Observable&ltUser> {
+                  return this.http.get&ltUser>(`${ this.baseUrl }/users/1`)
+                    .pipe(
+                      tap( user => this.user = user ),
+                      tap( user => localStorage.setItem('token', user.id.toString()))
+                    )
+                }
+
+                logout() {
+                    this.user = undefined
+                    localStorage.clear()
+                  }
+              </pre>
+          </section>
+          <hr>
+
+          <section class="container">
+              <h3>Sección 219 de 404 - Autenticas y mostrar usuario activo</h3>
+              <pre class="prettyprint">
+              
+                onLogin(): void {
+                    this.authService.login('', '')
+                      .subscribe( user => {
+                        this.router.navigate(['/'])
+                      })
+                  }
+              </pre>
+
+              <pre class="prettyprint">
+              
+                get user(): User | undefined {
+                    return this.authService.currentUser
+                  }
+                
+                  onLogout() {
+                    this.authService.logout()
+                    this.router.navigate(['/auth/login'])
+                  }
+              </pre>
+          </section>
+          <hr>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
