@@ -175,6 +175,521 @@
     </section>
     <hr>
 
+    <section class="container">
+        <h3>Sección 232 de 404 - Primeros pasos en formularios reactivos</h3>
+        <pre class="prettyprint">
+        
+          //   public myForm: FormGroup = new FormGroup({
+          //     name: new FormControl(''),
+          //     price: new FormControl(0),
+          //     inStorage: new FormControl(0),
+          //   })
+
+          public myForm: FormGroup = this.fb.group({
+            name: [''],
+            price: [0],
+            inStorage: [0]
+          })
+
+          constructor(
+            private fb: FormBuilder
+          ) {}
+
+          onSave(): void {
+            console.log(this.myForm.value)
+          }
+        </pre>
+
+        <pre class="prettyprint">
+        
+          &ltdiv class="row">
+          &ltdiv class="col">
+      
+              &ltform [formGroup]="myForm" autocomplete="off" (ngSubmit)="onSave()">
+      
+                  &lt!-- Campo de producto -->
+                  &ltdiv class="mb-3 row">
+                      &ltlabel class="col-sm-3 col-form-label">Producto&lt/label>
+                      &ltdiv class="col-sm-9">
+      
+                          &ltinput type="text"
+                                 class="form-control"
+                                 formControlName="name"
+                                 placeholder="Nombre del producto">
+      
+                          &ltspan class="form-text text-danger">
+                              &lt!-- Debe de ser de 3 letras -->
+                              error message
+                          &lt/span>
+                      &lt/div>
+                  &lt/div>
+      
+                  &lt!-- Campo de producto -->
+                  &ltdiv class="mb-3 row">
+                      &ltlabel class="col-sm-3 col-form-label">Precio&lt/label>
+                      &ltdiv class="col-sm-9">
+                          &ltinput type="number"
+                                 class="form-control"
+                                 formControlName="price"
+                                 placeholder="Precio del producto">
+                          &ltspan class="form-text text-danger">
+                              El precio debe de ser 0 o mayor
+                          &lt/span>
+                      &lt/div>
+                  &lt/div>
+      
+                  &lt!-- Campo de existencias -->
+                  &ltdiv class="mb-3 row">
+                      &ltlabel class="col-sm-3 col-form-label">Existencias&lt/label>
+                      &ltdiv class="col-sm-9">
+                          &ltinput type="number"
+                                 class="form-control"
+                                 formControlName="inStorage"
+                                 placeholder="Existencias del producto">
+      
+                          &ltspan class="form-text text-danger">
+                               Las existencias deben de ser 0 o mayor
+                          &lt/span>
+                      &lt/div>
+                  &lt/div>
+      
+      
+                  &ltdiv class="row">
+                      &ltdiv class="col">
+                          &ltbutton type="submit"
+                                  class="btn btn-primary float-end">
+                              Guardar
+                          &lt/button>
+                      &lt/div>
+                  &lt/div>
+      
+      
+      
+              &lt/form>
+      
+          &lt/div>
+      &lt/div>
+        </pre>
+    </section>
+    <hr>
+
+    <section class="container">
+        <h3>Sección 233 de 404 - Forms Validator - Validador incluido en angular</h3>
+        <pre class="prettyprint">
+        
+          public myForm: FormGroup = this.fb.group({
+            name: ['', [ Validators.required, Validators.minLength(3) ]],
+            price: [0, [ Validators.required, Validators.min(0) ]],
+            inStorage: [0, [ Validators.required, Validators.min(0) ]]
+          })
+        </pre>
+
+        <pre class="prettyprint">
+        
+          &ltdiv class="row">
+          &ltdiv class="col">
+      
+              &ltspan>Valid&lt/span>
+              &ltpre>{{ myForm.valid | json }}&lt/pre>
+      
+              &ltspan>Pristine&lt/span>
+              &ltpre>{{ myForm.pristine | json }}&lt/pre>
+      
+              &ltspan>Touched&lt/span>
+              &ltpre>{{ myForm.touched | json }}&lt/pre>
+      
+              &ltspan>Value&lt/span>
+              &ltpre>{{ myForm.value | json }}&lt/pre>
+      
+              &ltspan>Precio&lt/span>
+              &ltpre>{{ myForm.controls['price'].value | json }}&lt/pre>
+      
+              &ltspan>Precio - Errors&lt/span>
+              &ltpre>{{ myForm.controls['price'].errors | json }}&lt/pre>
+      
+              &ltspan>Producto&lt/span>
+              &ltpre>{{ myForm.controls['name'].value | json }}&lt/pre>
+      
+              &ltspan>Producto - Errors&lt/span>
+              &ltpre>{{ myForm.controls['name'].errors | json }}&lt/pre>
+          &lt/div>
+      &lt/div>
+        </pre>
+    </section>
+    <hr>
+
+    <section class="container">
+        <h3>Sección 234 de 404 - Re-establecer y establecer valor al formulario</h3>
+        <pre class="prettyprint">
+        
+          const rtx5090 = {
+            name: 'RTX 5090',
+            price: 2500,
+            inStorage: 6
+          }
+
+          @Component({
+            
+            ...
+          
+            ngOnInit(): void {
+              this.myForm.reset(rtx5090)
+            }
+          
+            onSave(): void {
+          
+              if (this.myForm.invalid) return
+              console.log(this.myForm.value)
+              this.myForm.reset({
+                price: 0,
+                inStorage: 0
+              })
+            }
+        </pre>
+    </section>
+    <hr>
+
+    <section class="container">
+        <h3>Sección 235 de 404 - Mostrar errores de validación en pantalla</h3>
+        <pre class="prettyprint">
+        
+          &ltinput type="text" class="form-control" formControlName="name" placeholder="Nombre del producto">
+
+          &ltspan *ngIf="myForm.controls['name'].getError('required') && myForm.controls['name'].touched"
+            class="form-text text-danger">
+            Este campo es requerido
+          &lt/span>
+          
+          &ltspan *ngIf="myForm.controls['name'].getError('minlength') && myForm.controls['name'].touched"
+            class="form-text text-danger">
+            Este campo requiere minimo 3 letras
+          &lt/span>
+        </pre>
+
+        <pre class="prettyprint">
+        
+          ngOnInit(): void {
+            // this.myForm.reset(rtx5090)
+          }
+        
+          onSave(): void {
+        
+            if (this.myForm.invalid) {
+              this.myForm.markAllAsTouched()
+              return
+            }
+            console.log(this.myForm.value)
+            this.myForm.reset({
+              price: 0,
+              inStorage: 0
+            })
+          }
+        </pre>
+    </section>
+    <hr>
+
+    <section class="container">
+        <h3>Sección 236 de 404 - Métodos de ayuda para los errores</h3>
+        <pre class="prettyprint">
+        
+          isValidField(field: string): boolean | null {
+            return this.myForm.controls[field].errors
+                   && this.myForm.controls[field].touched
+          }
+        
+          getFieldError(field: string): string | null {
+            if (!this.myForm.controls[ field ]) return null
+        
+            const errors = this.myForm.controls[ field ].errors || {}
+        
+            for (const key of Object.keys(errors )) {
+              switch( key) {
+                case 'required':
+                  return 'Este campo es requerido'
+        
+                case 'minlength':
+                  return `Mínimo ${ errors['minlength'].requiredLength } caracteres.`
+              }
+            }
+        
+            return ''
+        
+          }
+        </pre>
+
+        <pre class="prettyprint">
+        
+          &ltlabel class="col-sm-3 col-form-label">Producto&lt/label>
+          &ltdiv class="col-sm-9">
+          
+            &ltinput type="text" class="form-control" formControlName="name" placeholder="Nombre del producto">
+          
+            &ltspan *ngIf="isValidField('name')"
+              class="form-text text-danger">
+               {{ getFieldError('name') }}
+            &lt/span>
+          
+          &lt/div>
+          &lt/div>
+          
+          &lt!-- Campo de producto -->
+          &ltdiv class="mb-3 row">
+          &ltlabel class="col-sm-3 col-form-label">Precio&lt/label>
+          &ltdiv class="col-sm-9">
+            &ltinput type="number" class="form-control" formControlName="price" placeholder="Precio del producto">
+            &ltspan class="form-text text-danger" *ngIf="isValidField('price')">
+              El precio debe de ser 0 o mayor
+            &lt/span>
+          &lt/div>
+          &lt/div>
+          
+          &lt!-- Campo de existencias -->
+          &ltdiv class="mb-3 row">
+          &ltlabel class="col-sm-3 col-form-label">Existencias&lt/label>
+          &ltdiv class="col-sm-9">
+            &ltinput type="number" class="form-control" formControlName="inStorage" placeholder="Existencias del producto">
+          
+            &ltspan class="form-text text-danger" *ngIf="isValidField('inStorage')">
+              Las existencias deben de ser 0 o mayor
+            &lt/span>
+          &lt/div>
+          
+          &lt/div>
+        </pre>
+    </section>
+    <hr>
+
+    <section class="container">
+        <h3>Sección 237 de 404 - Formularios Dinámicos</h3>
+        <pre class="prettyprint">
+        
+          public myForm: FormGroup = this.fb.group({
+            name: ['', [Validators.required, Validators.minLength(3)]],
+            favoriteGames: this.fb.array([
+              ['Metal Gear', Validators.required],
+              ['Death Stranding', Validators.required],
+            ])
+          })
+        
+          constructor(
+            private fb: FormBuilder
+          ) {}
+        
+          get favoriteGames() {
+            return this.myForm.get('favoriteGames') as FormArray
+          }
+        
+          onSubmit(): void {
+        
+            if ( this.myForm.invalid ) {
+              this.myForm.markAllAsTouched()
+              return
+            }
+        
+            console.log(this.myForm.value)
+        
+            this.myForm.reset()
+        
+          }
+        </pre>
+
+        <pre class="prettyprint">
+        
+          &ltform [formGroup]="myForm" (ngSubmit)="onSubmit()" autocomplete="off">
+
+          &lt!-- Nombre -->
+          &ltdiv class="mb-3 row">
+              &ltlabel class="col-sm-3 col-form-label">Nombre&lt/label>
+              &ltdiv class="col-sm-9">
+                  &ltinput class="form-control"
+                         formControlName="name"
+                         placeholder="Nombre de la persona">
+                  &ltspan class="form-text text-danger">
+                         error message
+                  &lt/span>
+              &lt/div>
+          &lt/div>
+      
+          &lt!-- Agregar Favorito -->
+          &ltdiv class="mb-3 row">
+              &ltlabel class="col-sm-3 col-form-label">Agregar&lt/label>
+              &ltdiv class="col-sm-9">
+      
+                  &ltdiv class="input-group">
+                      &ltinput class="form-control"
+                             placeholder="Agregar favorito">
+      
+      
+                      &ltbutton class="btn btn-outline-primary"
+                              type="button">
+                          Agregar favorito
+                      &lt/button>
+                  &lt/div>
+              &lt/div>
+          &lt/div>
+      
+      
+          &lt!-- Lista de Juegos Favoritos -->
+          &ltdiv class="mb-3 row">
+              &ltlabel class="col-sm-3 col-form-label">Favoritos&lt/label>
+              &ltdiv class="col-sm-9" formArrayName="favoriteGames">
+      
+                  &ltdiv class="mb-1" *ngFor="let item of favoriteGames.controls; let i = index">
+      
+                      &ltdiv class="input-group">
+                          &ltinput [formControlName]="i"
+                            class="form-control">
+      
+                          &ltbutton class="btn btn-outline-danger"
+                                  type="button">
+                            Eliminar
+                        &lt/button>
+                      &lt/div>
+                      &ltspan class="form-text text-danger">
+                         Este campo es requerido
+                      &lt/span>
+      
+                  &lt/div>
+      
+              &lt/div>
+          &lt/div>
+        </pre>
+    </section>
+    <hr>
+
+    <section class="container">
+        <h3>Sección 238 de 404 - Validaciones Dinámicas</h3>
+        <pre class="prettyprint">
+        
+          isValidField(field: string): boolean | null {
+            return this.myForm.controls[field].errors
+                   && this.myForm.controls[field].touched
+          }
+        
+          isValidFieldInArray( formArray: FormArray, index: number ) {
+            return formArray.controls[index].errors
+                   && formArray.controls[index].touched
+          }
+        
+          getFieldError(field: string): string | null {
+            if (!this.myForm.controls[ field ]) return null
+        
+            const errors = this.myForm.controls[ field ].errors || {}
+        
+            for (const key of Object.keys(errors )) {
+              switch( key) {
+                case 'required':
+                  return 'Este campo es requerido'
+        
+                case 'minlength':
+                  return `Mínimo ${ errors['minlength'].requiredLength } caracteres.`
+              }
+            }
+        
+            return ''
+        
+          }
+        </pre>
+
+        <pre class="prettyprint">
+        
+          &ltspan *ngIf="isValidField('name')"
+          class="form-text text-danger">
+           {{ getFieldError('name')}}
+          &lt/span>
+
+          ...
+
+          &ltspan *ngIf="isValidFieldInArray(favoriteGames, i)"
+          class="form-text text-danger">
+          Este campo es requerido
+          &lt/span>
+          
+        </pre>
+    </section>
+    <hr>
+
+    <section class="container">
+        <h3>Sección 239 de 404 - Eliminar elementos de un FormArray</h3>
+        <pre class="prettyprint">
+        
+          onDeleteFavorite(index: number): void {
+            this.favoriteGames.removeAt(index)
+          }
+        </pre>
+
+        <pre class="prettyprint">
+        
+          &ltbutton (click)="onDeleteFavorite( i )"
+          class="btn btn-outline-danger"
+          type="button">
+          Eliminar
+          &lt/button>
+        </pre>
+    </section>
+    <hr>
+
+    <section class="container">
+        <h3>Sección 240 de 404 - Insertar elementos al FormArray</h3>
+        <pre class="prettyprint">
+        
+
+          public newFavorite: FormControl = new FormControl('', Validators.required)
+
+          ...
+        
+          onAddToFavorite(): void {
+            if (this.newFavorite.invalid) return
+        
+            const newGame = this.newFavorite.value
+        
+            // this.favoriteGames.push( new FormControl(newGame, Validators.required ))
+        
+            this.favoriteGames.push(
+              this.fb.control( newGame, Validators.required )
+            )
+        
+            this.newFavorite.reset()
+          }
+        
+          ...
+        
+          onSubmit(): void {
+        
+            if ( this.myForm.invalid ) {
+              this.myForm.markAllAsTouched()
+              return
+            }
+        
+            console.log(this.myForm.value);
+        
+            (this.myForm.controls['favoriteGames'] as FormArray) = this.fb.array([])
+        
+            this.myForm.reset()
+        
+          }
+        </pre>
+    </section>
+    <hr>
+
+    <section class="container">
+        <h3>Sección 241 de 404 - Documentacion - Formularios Reactivos</h3>
+        <p>
+          <a href="https://angular.io/guide/reactive-forms">https://angular.io/guide/reactive-forms</a>
+        </p>
+    </section>
+    <hr>
+
+    <section class="container">
+        <h3>Sección 242 de 404 - Codigo fuente de la seccion</h3>
+        <p>
+          <a href="https://github.com/Klerith/angular-reactive-forms/tree/fin-seccion-17">https://github.com/Klerith/angular-reactive-forms/tree/fin-seccion-17</a>
+        </p>
+        
+    </section>
+    <hr>
+
+
 
 
 
