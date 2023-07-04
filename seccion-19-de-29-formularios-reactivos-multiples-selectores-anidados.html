@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+<title>Sección 19: Formularios Reactivos - Multiples selectores anidados</title>
+</head>
+
+<body>
+<header class="text-center">
+<h1>Sección 19: Formularios Reactivos - Multiples selectores anidados</h1>
+</header>
+<main class="container">
+    <hr />
+    <div class="row">
+      <div class="col">
+        <div class="list-group">
+          <a
+            href="./index.html"
+            class="list-group-item list-group-item-action"
+          >
+            Volver
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 255 de 404 - Introducción a la sección</h2>
+        
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 256 de 404 - Temas puntuales de la sección</h2>
+        
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 257 de 404 - Inicio del Proyecto - Selectores</h2>
+        <pre class="prettyprint">
+                
+          > ng new selectores
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 258 de 404 - Estructura de direcctorios para esta aplicación</h2>
+        <pre class="prettyprint">
+                
+          > ng g m countries
+          > ng g c countries/pages/selector-page
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 259 de 404 - Solucion de la tarea</h2>
+        <pre class="prettyprint">
+                
+          const routes: Routes = [
+            {
+              path: '',
+              children: [
+                { path: '', component: SelectorPageComponent },
+                { path: '**', redirectTo: '' },
+              ],
+            },
+          ];
+        </pre>
+
+        <pre class="prettyprint">
+                
+          const routes: Routes = [
+            {
+              path: 'selector',
+              loadChildren: () => import('./countries/countries.module').then(m => m.CountriesModule)
+            },
+            {
+              path: '**',
+              redirectTo: 'selector'
+            }
+          ]
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 260 de 404 - Formulario reactivo - primer selector</h2>
+        <pre class="prettyprint">
+                
+          public myForm: FormGroup = this.fb.group({
+            region: ['', Validators.required ],
+            country: ['', Validators.required ],
+            borders: ['', Validators.required ],
+          })
+
+          constructor(
+            private fb: FormBuilder
+          ) {}
+        </pre>
+
+        <pre class="prettyprint">
+                
+          &lth1 class="mt-3">Selectores anidados&lt/h1>
+          &lthr>
+          
+          &ltform [formGroup]="myForm">
+          
+            &lt!-- Región -->
+            &ltdiv class="row mb-3">
+              &ltdiv class="col">
+                &ltlabel class="form-label">Continente&lt/label>
+                &ltselect formControlName="region" class="form-control">
+                  &ltoption value="">-- Seleccione Continente --&lt/option>
+                &lt/select>
+              &lt/div>
+            &lt/div>
+          &lt/form>
+          
+          &lth3>Formulario&lt/h3>
+          &ltcode>
+            {{ myForm.value | json }}
+          &lt/code>
+          &ltp>
+            is form valid: {{ myForm.valid }}
+          &lt/p>
+          
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 261 de 404 - Servicio e interfaces</h2>
+        <p>
+          <a href="https://restcountries.com/">https://restcountries.com/</a>
+        </p>
+
+        <pre class="prettyprint">
+                
+          export enum Region {
+            Africa   = 'Africa',
+            Americas = 'Americas',
+            Asia     = 'Asia',
+            Europe   = 'Europe',
+            Oceania  = 'Oceania',
+          }
+            export interface Country {
+            name:         Name;
+            cca3:         string;
+            status:       Status;
+
+            ...
+        </pre>
+
+        <pre class="prettyprint">
+                
+          > ng g s countries/services/countries
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 262 de 404 - Selector de Regiones</h2>
+        <pre class="prettyprint">
+                
+          private _regions: Region[] = [
+          Region.Africa,
+          Region.Americas,
+          Region.Asia,
+          Region.Oceania,
+          Region.Europe
+        ]
+      
+        constructor() { }
+      
+        get regions(): Region[] {
+          return [...this._regions]
+        }
+        </pre>
+
+        <pre class="prettyprint">
+                
+
+          get regions(): Region[] {
+            return this.countriesService.regions
+          }
+        </pre>
+
+        <pre class="prettyprint">
+                
+          &ltform [formGroup]="myForm">
+
+          &lt!-- Región -->
+          &ltdiv class="row mb-3">
+            &ltdiv class="col">
+              &ltlabel class="form-label">Continente&lt/label>
+              &ltselect formControlName="region" class="form-control">
+                &ltoption value="">-- Seleccione Continente --&lt/option>
+                &ltoption *ngFor="let region of regions" [value]="region">{{ region }}&lt/option>
+              &lt/select>
+            &lt/div>
+          &lt/div>
+        &lt/form>
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 263 de 404 - Segundo selector anidado - Paises</h2>
+        <pre class="prettyprint">
+                
+          ngOnInit(): void {
+            this.onRegionChanged();
+          }
+        
+          onRegionChanged(): void {
+            this.myForm.get('region')!.valueChanges.subscribe((region) => {
+              console.log({ region });
+            });
+          }
+        </pre>
+
+        <pre class="prettyprint">
+                
+          &lt!-- Paises -->
+          &ltdiv class="row mb-3">
+            &ltdiv class="col">
+              &ltlabel class="form-label">País:&lt/label>
+              &ltselect formControlName="country" class="form-control">
+                &ltoption value="">-- Seleccione País --&lt/option>
+                &ltoption *ngFor="let region of regions" [value]="region">{{ region }}&lt/option>
+              &lt/select>
+            &lt/div>
+          &lt/div>
+        </pre>
+
+        <pre class="prettyprint">
+                
+          export interface SmallCountry {
+            name: string;
+            cca3: string;
+            borders: string[];
+          }
+        </pre>
+
+        <pre class="prettyprint">
+                
+          getCountriesByRegion(region: Region): SmallCountry[] {
+            return []
+          }
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 264 de 404 - Obtener paises por región</h2>
+        <pre class="prettyprint">
+                
+          getCountriesByRegion(region: Region): Observable&ltSmallCountry[]> {
+            if (!region) return of([])
+        
+            const url: string = `${ this.baseUrl }/region/${ region }?fields=cca3,name,borders`
+            return this.http.get&ltSmallCountry[]>(url)
+              .pipe(
+                tap( response => console.log({ response }))
+              )
+          }
+        </pre>
+
+        <pre class="prettyprint">
+                
+          onRegionChanged(): void {
+            this.myForm.get('region')!.valueChanges
+            .pipe(
+              switchMap( region => this.countriesService.getCountriesByRegion( region ))
+              // switchMap( this.countriesService.getCountriesByRegion )
+            )
+            .subscribe((countries) => {
+              console.log({ countries });
+            });
+          }
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 265 de 404 - Convertir los paises y mostrarlos en pantalla</h2>
+        <pre>
+          getCountriesByRegion(region: Region): Observable&ltSmallCountry[]> {
+            if (!region) return of([])
+        
+            const url: string = `${ this.baseUrl }/region/${ region }?fields=cca3,name,borders`
+            return this.http.get&ltCountry[]>(url)
+              .pipe(
+                map( countries => countries.map( country => ({
+                  name: country.name.common,
+                  cca3: country.cca3,
+                  borders: country.borders ?? []
+                })) ),
+              )
+          }
+        </pre>
+
+        <pre class="prettyprint">
+                
+          onRegionChanged(): void {
+            this.myForm.get('region')!.valueChanges
+            .pipe(
+              switchMap( region => this.countriesService.getCountriesByRegion( region ))
+              // switchMap( this.countriesService.getCountriesByRegion )
+            )
+            .subscribe((countries) => {
+              this.countriesByRegion = countries
+            });
+          }
+        </pre>
+
+        <pre class="prettyprint">
+                
+          &lt!-- Paises -->
+          &ltdiv class="row mb-3">
+            &ltdiv class="col">
+              &ltlabel class="form-label">País:&lt/label>
+              &ltselect formControlName="country" class="form-control">
+                &ltoption value="">-- Seleccione País --&lt/option>
+                &ltoption *ngFor="let country of countriesByRegion" [value]="country.cca3">{{ country.name }}&lt/option>
+              &lt/select>
+            &lt/div>
+          &lt/div>
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 266 de 404 - Limpiar pais cuando el primer selector cambia</h2>
+        <pre class="prettyprint">
+                
+          onRegionChanged(): void {
+            this.myForm.get('region')!.valueChanges
+            .pipe(
+              tap( () => this.myForm.get('country')?.setValue('')),
+              switchMap( region => this.countriesService.getCountriesByRegion( region ))
+              // switchMap( this.countriesService.getCountriesByRegion )
+            )
+            .subscribe((countries) => {
+              this.countriesByRegion = countries
+            });
+          }
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 267 de 404 - Tercer selector anidado - Frontera</h2>
+        <pre class="prettyprint">
+                
+          onCountryChanged(): void {
+            this.myForm.get('country')!.valueChanges
+            .pipe(
+              tap( () => this.myForm.get('border')?.setValue('')),
+              filter(( value: string) => value.length > 0 ),
+              switchMap( alphaCode => this.countriesService.getCountryByAlphaCode( alphaCode ))
+            )
+            .subscribe((country) => {
+              this.borders = country.borders
+            });
+          }
+        </pre>
+
+        <pre class="prettyprint">
+                
+          getCountryByAlphaCode(alphaCode: string): Observable&ltSmallCountry> {
+            console.log({ alphaCode })
+            const url: string = `${this.baseUrl}/alpha/${alphaCode}?fields=cca3,name,borders`;
+            return this.http.get&ltCountry>(url).pipe(
+              map((country) => ({
+                name: country.name.common,
+                cca3: country.cca3,
+                borders: country.borders ?? [],
+              }))
+            );
+          }
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 268 de 404 - Información de las fronteras</h2>
+        <pre class="prettyprint">
+                
+          getCountryBordersByCode( borders: string[]): Observable&ltSmallCountry[]> {
+            if (!borders || borders.length === 0) return of([])
+        
+            const countriesRequests: Observable&ltSmallCountry>[] = []
+        
+            borders.forEach( code => {
+              const request = this.getCountryByAlphaCode( code )
+              countriesRequests.push( request )
+            })
+        
+            return combineLatest( countriesRequests )
+          }
+        </pre>
+
+        <pre class="prettyprint">
+                
+          onCountryChanged(): void {
+            this.myForm.get('country')!.valueChanges
+            .pipe(
+              tap( () => this.myForm.get('border')?.setValue('')),
+              filter(( value: string) => value.length > 0 ),
+              switchMap( alphaCode => this.countriesService.getCountryByAlphaCode( alphaCode )),
+              switchMap( country => this.countriesService.getCountryBordersByCode( country.borders ))
+            )
+            .subscribe((countries) => {
+              this.borders = countries
+            });
+          }
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 269 de 404 - Codigo Fuente de la Sección</h2>
+        <p><a href="https://github.com/Klerith/angular-selectores-multiples">https://github.com/Klerith/angular-selectores-multiples</a></p>
+      </article>
+    </section>
+
+
+
+
+
+
+
+
+
+
+
+</main>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</body>
+
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+    <title>Sección 25 de 29 - Auth MEAN - Nest Backend</title>
+  </head>
+
+  <body>
+    <header class="text-center">
+      <h1>Sección 25 de 29 - Auth MEAN - Nest Backend</h1>
+    </header>
+    <main class="container">
+      <hr />
+
+      <div class="row">
+        <div class="col">
+          <div class="list-group">
+            <a
+              href="./index.html"
+              class="list-group-item list-group-item-action"
+            >
+              Volver
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 331 de 404 - Introducción a la sección</h2>
+          
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 332 de 404 - Temas puntuales de la sección</h2>
+          <p>
+            <a href="https://cursos.devtalles.com/pages/mas-talento">https://cursos.devtalles.com/pages/mas-talento</a>
+          </p>
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 333 de 404 - Inicio del backend - NestBackend</h2>
+          <pre class="prettyprint">
+                  
+            > npm i -g @nestjs/cli
+            > nest new nestBackend
+
+            > npm run dev:start
+          </pre>
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 334 de 404 - configurar mongoDb docker</h2>
+          <p>Encender docker desktop</p>
+          <p>
+            <a href="https://hub.docker.com/">https://hub.docker.com/</a>
+          </p>
+
+          <pre class="prettyprint">
+                  
+            > touch docker-compose.yml
+          </pre>
+
+          <pre class="prettyprint">
+                  
+            version: '3'
+
+            services:
+              db:
+                container_name: mean-db
+                image: mongo:5.0.16
+                volumes:
+                  - ./mongo:/data/db
+                ports:
+                  - 27017:27017
+                restart: always
+          </pre>
+
+          <pre class="prettyprint">
+                  
+            > docker compose up -d
+          </pre>
+
+          <p>Poner en el gitignore la carpeta de mongo</p>
+        </article>
+      </section>
+    </main>
+
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

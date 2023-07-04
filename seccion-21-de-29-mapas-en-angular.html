@@ -1,0 +1,927 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+<title>Sección 21 de 29 - Mapas en angular</title>
+</head>
+
+<body>
+<header class="text-center">
+<h1>Sección 21 de 29 - Mapas en angular</h1>
+</header>
+<main class="container">
+    <hr />
+
+    <div class="row">
+      <div class="col">
+        <div class="list-group">
+          <a
+            href="./index.html"
+            class="list-group-item list-group-item-action"
+          >
+            Volver
+          </a>
+        </div>
+      </div>
+    </div>
+
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 278 de 404 - Introducción a la sección</h2>
+        
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 279 de 404 - Temas puntuales de la seccion</h2>
+        
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 280 de 404 - Demostración del objetivo final de la sección</h2>
+        
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 281 de 404 - Inicio de sección - MapasApp</h2>
+        <pre class="prettyprint">
+                
+            > ng new mapsApp
+        </pre>
+        <p>
+            <a href="https://getbootstrap.com/">https://getbootstrap.com/</a>
+            <br>
+            <a href="https://www.google.com/maps/@2.9090658,-75.2829042,15z?entry=ttu">https://www.google.com/maps/@2.9090658,-75.2829042,15z?entry=ttu</a>
+            <br>
+            <a href="https://www.mapbox.com/">https://www.mapbox.com/</a>
+        </p>
+      </article>
+      
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 282 de 404 - Crear los componentes y rutas</h2>
+          <pre>
+            > ng g m maps --routing
+            > ng g c maps/components/miniMap
+            > ng g c maps/components/sideMenu
+            > ng g c maps/layout/mapsLayout --skip-selector
+            > ng g c maps/pages/fullScreenPage --skip-selector
+            > ng g c maps/pages/markersPage --skip-selector
+            > ng g c maps/pages/propertiesPage --skip-selector
+            > ng g c maps/pages/zoomRangePage --skip-selector
+          </pre>
+
+          <pre class="prettyprint">
+                  
+            &ltp>maps-layout works!&lt/p>
+            &ltrouter-outlet>&lt/router-outlet>
+          </pre>
+
+          <pre class="prettyprint">
+                  
+            const routes: Routes = [
+            {
+              path: 'maps',
+              loadChildren: () => import('./maps/maps.module').then( m => m.MapsModule)
+            },
+            {
+              path: '**',
+              redirectTo: 'maps'
+            }
+          ];
+          </pre>
+
+          <pre class="prettyprint">
+                  
+            const routes: Routes = [
+            {
+              path: '',
+              component: MapsLayoutComponent,
+              children: [
+                { path: 'fullscreen', component: FullScreenPageComponent },
+                { path: 'zoom-range', component: ZoomRangePageComponent },
+                { path: 'markers', component: MarkersPageComponent },
+                { path: 'properties', component: PropertiesPageComponent },
+                { path: '**', redirectTo: 'fullscreen' },
+              ]
+            }
+          ];
+          </pre>
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 283 de 404 - Menu de la aplicación</h2>
+          <pre class="prettyprint">
+                  
+            interface MenuItem {
+                route: string
+                name: string
+            }
+            
+            ...
+            
+            public menuItems: MenuItem[] = [
+                { route: '/maps/fullscreen', name: 'FullScreen' },
+                { route: '/maps/zoom-range', name: 'ZoomRange' },
+                { route: '/maps/markers', name: 'Markers' },
+                { route: '/maps/properties', name: 'Properties' },
+            ]
+          </pre>
+
+          <pre class="prettyprint">
+                  
+            li {
+                cursor: pointer;
+                transition: 0.2s all;
+              }
+          </pre>
+
+          <pre class="prettyprint">
+                  
+            &ltmaps-side-menu>&lt/maps-side-menu>
+            &ltrouter-outlet>&lt/router-outlet>
+          </pre>
+
+          <pre class="prettyprint">
+                  
+            &ltul class="list-group">
+            &ltli
+              class="list-group-item"
+              *ngFor="let item of menuItems"
+              [routerLink]="item.route"
+              routerLinkActive="active"
+            >
+              {{ item.name }}
+            &lt/li>
+          &lt/ul>
+          
+          </pre>
+
+          <pre class="prettyprint">
+                  
+            maps-side-menu {
+                left: 20px;
+                position: fixed;
+                top: 20px;
+                width: 180px;
+                z-index: 999;
+              }
+              
+          </pre>
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 284 de 404 - Archivo ENV y MapboxKey</h2>
+          <p>
+            <a href="https://account.mapbox.com/">https://account.mapbox.com/</a>
+          </p>
+
+          <pre class="prettyprint">
+            // .gitignore
+            .env
+            src/environments/environments.ts
+          </pre>
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 285 de 404 - crear env automaticamente</h2>
+          <pre class="prettyprint">
+                  
+            > npm i dotenv -D
+            > mkdir scripts
+            > touch scripts/set-envs.js
+          </pre>
+
+          <pre class="prettyprint">
+                  
+            const { writeFileSync, mkdirSync } = require('fs')
+
+            require('dotenv').config()
+            
+            const targetPath = './src/environments/environment.ts'
+            
+            const envFileContent = `
+            export const environment = {
+              mapbox_key: '${ process.env.MAPBOX_KEY }'
+            }
+            `
+            
+            mkdirSync('./src/environments', { recursive: true })
+            
+            writeFileSync( targetPath, envFileContent )
+            
+          </pre>
+
+          <pre class="prettyprint">
+                  
+            "scripts": {
+                "ng": "ng",
+                "envs": "node ./scripts/set-envs.js",
+                "start": "npm run envs && ng serve",
+                "build": "npm run envs && ng build",
+          </pre>
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 286 de 404 - Mostrar un mapa en pantalla completa</h2>
+          <pre class="prettyprint">
+                  
+            > npm install mapbox-gl --save
+            > npm install @types/mapbox-gl --save-dev
+          </pre>
+          <pre class="prettyprint">
+
+            &ltlink href='https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.css' rel='stylesheet' />
+          </pre>
+
+          <pre class="prettyprint">
+                  
+            import * as mapboxgl from 'mapbox-gl';
+            import { environment } from 'src/environments/environment';
+            
+            (mapboxgl as any).accessToken = environment.mapbox_key;
+            
+            @Component({
+              templateUrl: './full-screen-page.component.html',
+              styleUrls: ['./full-screen-page.component.css'],
+            })
+            export class FullScreenPageComponent implements AfterViewInit {
+            
+              constructor() {}
+            
+              ngAfterViewInit(): void {
+                const map = new mapboxgl.Map({
+                  container: 'map', // container ID
+                  style: 'mapbox://styles/mapbox/streets-v12', // style URL
+                  center: [-74.5, 40], // starting position [lng, lat]
+                  zoom: 9, // starting zoom
+                });
+              }
+          </pre>
+
+          <pre class="prettyprint">
+                  
+            #map {
+                width: 100vw;
+                height: 100vh;
+              }
+          </pre>
+
+          <pre class="prettyprint">
+                  
+            &ltdiv id="map">&lt/div>
+          </pre>
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 287 de 404 - ViewChild - ElementRef</h2>
+          <pre class="prettyprint">
+                  
+            &ltdiv #map>&lt/div>
+
+          </pre>
+          <pre class="prettyprint">
+                  
+            div {
+                width: 100vw;
+                height: 100vh;
+                background-color: red;
+              }
+              
+          </pre>
+
+          <pre class="prettyprint">
+                  
+            // maps.module.ts
+
+            import { NgModule } from '@angular/core';
+            import { CommonModule } from '@angular/common';
+            
+            import * as mapboxgl from 'mapbox-gl';
+            import { environment } from 'src/environments/environment';
+            
+            (mapboxgl as any).accessToken = environment.mapbox_key;
+          </pre>
+
+          <pre class="prettyprint">
+                  
+            import { Map } from 'mapbox-gl';
+
+            ...
+            
+              @ViewChild('map')  divMap?: ElementRef
+            
+              constructor() {}
+            
+              ngAfterViewInit(): void {
+            
+                if (!this.divMap) throw 'Elemento no encontrado'
+                const map = new Map({
+                  container: this.divMap.nativeElement, // container ID
+                  style: 'mapbox://styles/mapbox/streets-v12', // style URL
+                  center: [-74.5, 40], // starting position [lng, lat]
+                  zoom: 9, // starting zoom
+                });
+              }
+          </pre>
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 288 de 404 - ZoomIn y ZoomOut</h2>
+          <pre class="prettyprint">
+                  
+            #map {
+                width: 100vw;
+                height: 100vh;
+              }
+              
+              .floating-range {
+                position: fixed;
+                bottom: 20px;
+                left: 20px;
+                z-index: 999;
+                width: 500px;
+                background-color: white;
+                border-radius: 10px;
+                box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+              }
+              
+              .floating-content {
+                display: flex;
+                align-items: center;
+              }
+              
+          </pre>
+
+          <pre class="prettyprint">
+                  
+            &ltdiv #map id="map">&lt/div>
+
+            &ltdiv class="floating-range p-2">
+              &ltdiv class="floating-content">
+                &ltbutton class="btn btn-primary">-&lt/button>
+                &ltinput type="range" class="form-range px-2" min="-2" max="18">
+                &ltbutton class="btn btn-primary">+&lt/button>
+              &lt/div>
+            
+              &ltspan class="form-label">
+                Zoom: {{ 10.123 }}
+                &ltbr>
+                Lgn,Lat: {{ 'algo' }}
+              &lt/span>
+            &lt/div>
+            
+          </pre>
+
+          <pre class="prettyprint">
+                  
+          
+          </pre>
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 289 de 404 - Controlar el nivel del zoom</h2>
+          <pre class="prettyprint">
+                  
+            public map?: Map
+
+            public zoom: number = 12
+            public latitude: number = 2.95
+            public longitude: number = -75.30
+
+            constructor() {}
+
+            ngAfterViewInit(): void {
+
+              if (!this.divMap) throw 'Elemento no encontrado'
+              this.map = new Map({
+                container: this.divMap.nativeElement, // container ID
+                style: 'mapbox://styles/mapbox/streets-v12', // style URL
+                center: [this.longitude, this.latitude], // starting position [lng, lat]
+                zoom: this.zoom
+              });
+
+              this.mapListeners()
+            }
+
+            mapListeners() {
+              if (!this.map) throw 'Mapa no inicializado'
+
+              this.map.on('zoom', (ev) => {
+                this.zoom = this.map!.getZoom()
+                // this.latitude = this.map!.getZoom()
+                // this.zoom = this.map!.getZoom()
+              })
+
+              this.map.on('zoomend', (ev) => {
+                if (this.map!.getZoom() &lt 18) return
+                this.map!.zoomTo(18)
+              })
+            }
+
+            zoomIn() {
+              this.map?.zoomIn()
+            }
+
+            zoomOut() {
+              this.map?.zoomOut()
+            }
+
+            zoomChanged( value: string ) {
+              this.zoom = Number( value )
+              this.map?.zoomTo( this.zoom )
+            }
+          </pre>
+
+          <pre class="prettyprint">
+                  
+            &ltdiv class="floating-content">
+            &ltbutton class="btn btn-primary" (click)="zoomOut()">-&lt/button>
+            &ltinput (input)="zoomChanged( zoomInput.value )" #zoomInput type="range" class="form-range px-2" min="-2" max="18" [value]="zoom">
+            &ltbutton class="btn btn-primary" (click)="zoomIn()">+&lt/button>
+          &lt/div>
+        
+          &ltspan class="form-label">
+            Zoom: {{ zoom | number:'2.2-2'}}
+            &ltbr>
+            Lgn,Lat: {{ longitude + ', ' + latitude }}
+          &lt/span>
+          </pre>
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 290 de 404 - Obtener las coordenadas centrales del mapa</h2>
+          <pre class="prettyprint">
+                  
+            public currentLngLat: LngLat = new LngLat(-75.28, 2.93)
+
+            public zoom: number = 12
+          
+            constructor() {}
+          
+            ngAfterViewInit(): void {
+          
+              if (!this.divMap) throw 'Elemento no encontrado'
+              this.map = new Map({
+                container: this.divMap.nativeElement, // container ID
+                style: 'mapbox://styles/mapbox/streets-v12', // style URL
+                center: this.currentLngLat, // starting position [lng, lat]
+                zoom: this.zoom
+              });
+          
+              this.mapListeners()
+            }
+          
+            ngOnDestroy(): void {
+                this.map?.remove()
+            }
+          
+            mapListeners() {
+              if (!this.map) throw 'Mapa no inicializado'
+          
+              this.map.on('zoom', (ev) => {
+                this.zoom = this.map!.getZoom()
+              })
+          
+              this.map.on('zoomend', (ev) => {
+                if (this.map!.getZoom() < 18) return
+                this.map!.zoomTo(18)
+              })
+          
+              this.map.on('move', () => {
+                this.currentLngLat = this.map!.getCenter()
+              })
+            }
+          </pre>
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 291 de 404 - Marcadores en el mapa</h2>
+          <pre class="prettyprint">
+                  
+            ngAfterViewInit(): void {
+
+              if (!this.divMap) throw 'Elemento no encontrado'
+          
+              this.map = new Map({
+                container: this.divMap.nativeElement, // container ID
+                style: 'mapbox://styles/mapbox/streets-v12', // style URL
+                center: this.currentLngLat, // starting position [lng, lat]
+                zoom: this.zoom
+              });
+          
+              // const markerHtml = document.createElement('div')
+              // markerHtml.innerHTML = 'Punto de Encuentro'
+          
+              // const marker = new Marker({
+              //   color: 'red',
+              //   element: markerHtml
+              // })
+              //   .setLngLat( this.currentLngLat )
+              //   .addTo( this.map! )
+            }
+          </pre>
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 292 de 404 - Añadir marcadores de forma dinámica</h2>
+          <pre class="prettyprint">
+                  
+            createMarker() {
+              if (!this.map) return
+          
+              const lngLat = this.map.getCenter()
+          
+              const color = '#xxxxxx'.replace(/x/g, y=>(Math.random()*16|0).toString(16));
+              this.addMarker( lngLat , color)
+            }
+          
+            addMarker( lngLat: LngLat, color: string) {
+              if (!this.map) return
+          
+              const marker = new Marker({
+                color,
+                draggable: true
+              })
+               .setLngLat( lngLat )
+               .addTo( this.map )
+            }
+          </pre>
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 293 de 404 - Mantener el arreglo de marcadores y colores</h2>
+
+          <pre class="prettyprint">
+                  
+            interface MarketAndColor {
+              color: string,
+              marker: Marker
+            }
+            
+            ...
+            
+              public markers: MarketAndColor[] = []
+
+              addMarker( lngLat: LngLat, color: string) {
+                if (!this.map) return
+            
+                const marker = new Marker({
+                  color,
+                  draggable: true
+                })
+                 .setLngLat( lngLat )
+                 .addTo( this.map )
+            
+                this.markers.push({marker, color})
+              }
+            
+              deleteMarker(index: number) {
+                console.log({ index })
+                this.markers[ index ].marker.remove()
+                this.markers.splice(index, 1)
+              }
+          </pre>
+
+          <pre class="prettyprint">
+                  
+            &ltul class="list-group">
+            &ltli
+            class="list-group-item"
+            *ngFor="let marker of markers; let i = index"
+            [ngStyle]="{ 'background-color': marker.color }"
+            (dblclick)="deleteMarker( i )">
+              Marker {{ i + 1 }}
+            &lt/li>
+          &lt/ul>
+          </pre>
+          
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 294 de 404 - FlyTo</h2>
+          <pre class="prettyprint">
+                  
+            flyTo(marker: Marker) {
+              if (!this.map) return
+          
+              this.map.flyTo({center: marker.getLngLat(), zoom: 14})
+            }
+          </pre>
+
+          <pre class="prettyprint">
+                  
+            &ltli
+            class="list-group-item"
+            *ngFor="let marker of markers; let i = index"
+            [ngStyle]="{ 'background-color': marker.color }"
+            (dblclick)="deleteMarker( i )"
+            (click)="flyTo( marker.marker )">
+              Marker {{ i + 1 }}
+            &lt/li>
+          </pre>
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 295 de 404 - Guardar y leer del localstorage</h2>
+          <pre class="prettyprint">
+
+            interface PlainMarker {
+              color: string
+              lngLat: number[]
+            }
+
+            ...
+                  
+            saveToLocalStorage() {
+              const plainMarkers: PlainMarker[] = this.markers.map(({ color, marker}) => {
+                return {
+                  color,
+                  lngLat: marker.getLngLat().toArray()
+                }
+              })
+          
+              localStorage.setItem('plainMarkers', JSON.stringify( plainMarkers ))
+            }
+          
+            readFromLocalStorage() {
+              const plainMarkersString = localStorage.getItem('plainMarkers') ?? '[]'
+          
+              const plainMarkers: PlainMarker[] = JSON.parse( plainMarkersString )
+          
+              plainMarkers.forEach(({ color, lngLat }) => {
+          
+                const [ lng, lat ] = lngLat
+                const marketLngLat = new LngLat(lng, lat)
+          
+                this.addMarker(marketLngLat, color)
+              })
+          
+          
+              // this.markers = plainMarkers.map(({ color, lngLat }) => {
+          
+              //   const [ lng, lat ] = lngLat
+              //   const marketLngLat = new LngLat(lng, lat)
+          
+              //   const marker = new Marker({
+              //     color,
+              //     draggable: true
+              //   })
+              //    .setLngLat(  marketLngLat )
+              //    .addTo( this.map! );
+          
+              //   return {
+              //     color,
+              //     marker
+              //   }
+              // })
+            }
+          </pre>
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 296 de 404 - Actualizar storage cuando se mueven los marcadores</h2>
+          <pre class="prettyprint">
+                  
+            addMarker( lngLat: LngLat, color: string) {
+              if (!this.map) return
+          
+              const marker = new Marker({
+                color,
+                draggable: true
+              })
+               .setLngLat( lngLat )
+               .addTo( this.map )
+          
+              this.markers.push({marker, color})
+              this.saveToLocalStorage()
+          
+              marker.on('dragend', () => this.saveToLocalStorage() )
+            }
+          </pre>
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 297 de 404 - Lista de Casas - Diseño y estructura</h2>
+          <pre class="prettyprint">
+                  
+            import { Component } from '@angular/core';
+
+            interface House {
+              title: string;
+              description: string;
+              lngLat: [number, number];
+            }
+            
+            @Component({
+              templateUrl: './properties-page.component.html',
+              styleUrls: ['./properties-page.component.css'],
+            })
+            export class PropertiesPageComponent {
+              public houses: House[] = [
+                {
+                  title: 'Casa residencial, Canadá',
+                  description: 'Bella propiedad en Katana, Canadá',
+                  lngLat: [-75.92722289474008, 45.280015511264466],
+                },
+                {
+                  title: 'Casa de playa, México',
+                  description: 'Hermosa casa de playa en Acapulco, México',
+                  lngLat: [-99.91287720907991, 16.828940930185748],
+                },
+                {
+                  title: 'Apartamento, Argentina',
+                  description:
+                    'Lujoso apartamento en el corazón de Buenos Aires, Argentina',
+                  lngLat: [-58.430166677283445, -34.57150108832866],
+                },
+                {
+                  title: 'Local comercial, España',
+                  description:
+                    'Local comercial disponible en Madrid, España, cerca de El Jardín Secreto.',
+                  lngLat: [-3.7112735618380177, 40.42567285425766],
+                },
+              ];
+            }
+            
+          </pre>
+
+          <pre class="prettyprint">
+                  
+            &ltdiv class="row mt-3">
+            &ltdiv class="col-2">&lt/div>
+            &ltdiv class="col">
+              &lth3>Listado de Propiedades&lt/h3>
+              &lthr>
+            &lt/div>
+          &lt/div>
+          
+          &ltdiv class="row mt-2">
+            &ltdiv class="col-2">&lt/div>
+            &ltdiv class="col">
+              &ltdiv class="row">
+          
+                &lt!-- Houses -->
+                &ltdiv *ngFor="let house of houses" class="col-4 mb-2">
+                  &ltdiv class="card">
+                    &ltimg src="..." class="card-img-top">
+          
+                    &ltdiv class="card-body">
+                      &lth5 class="card-title">{{ house.title }}&lt/h5>
+                      &ltp class="card-text">{{ house.description }}&lt/p>
+                    &lt/div>
+                  &lt/div>
+                &lt/div>
+          
+              &lt/div>
+            &lt/div>
+          &lt/div>
+          
+          </pre>
+        </article>
+      </section>
+      
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 298 de 404 - Componente MiniMapa</h2>
+          <pre class="prettyprint">
+                  
+            export class MiniMapComponent implements AfterViewInit {
+              @Input() lngLat?: [number, number]
+              @ViewChild('map') public divMap?: ElementRef
+            
+              ngAfterViewInit(): void {
+                if (!this.divMap?.nativeElement) throw 'Map div not found'
+                if (!this.lngLat) throw "LngLat can't be null"
+            
+                const map = new Map({
+                  container: this.divMap.nativeElement, // container ID
+                  style: 'mapbox://styles/mapbox/streets-v12', // style URL
+                  center: this.lngLat, // starting position [lng, lat]
+                  zoom: 15, // starting zoom
+                  interactive: false
+                });
+            
+                const marker = new Marker()
+                 .setLngLat( this.lngLat )
+                 .addTo( map )
+              }
+            
+            }
+          </pre>
+
+          <pre class="prettyprint">
+                  
+            &ltmap-mini-map [lngLat]="house.lngLat" class="card-img-top">&lt/map-mini-map>
+          </pre>
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 299 de 404 - Codigo fuente de la sección</h2>
+          <p>
+            <a href="https://github.com/Klerith/angular-mapbox/tree/fin-seccion-21">https://github.com/Klerith/angular-mapbox/tree/fin-seccion-21</a>
+          </p>
+          
+        </article>
+      </section>
+
+
+
+
+
+
+
+
+
+
+</main>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</body>
+
+</html>

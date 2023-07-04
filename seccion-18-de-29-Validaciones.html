@@ -1,0 +1,664 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+<title>Sección 18 de 29 - Validaciones</title>
+</head>
+
+<body>
+<header class="text-center">
+<h1>Sección 18 de 29 - Validaciones</h1>
+</header>
+<main class="container">
+    <hr />
+    <div class="row">
+      <div class="col">
+        <div class="list-group">
+          <a
+            href="./index.html"
+            class="list-group-item list-group-item-action"
+          >
+            Volver
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 243 de 404 - Introducción a la Sección</h2>
+        
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 244 de 404 - Temas puntuales de la sección</h2>
+        
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 245 de 404 - Continuacion del proyecto y tarea</h2>
+        <pre class="prettyprint">
+                
+            public myForm: FormGroup = this.fb.group({
+                gender: ['M', Validators.required],
+                wantNotifications: [ true, Validators.required ],
+                termsAndConditions: [false, Validators.requiredTrue]
+              })
+            
+              constructor(
+                private fb: FormBuilder
+              ) {}
+            
+              onSave(): void {
+                if (this.myForm.invalid) {
+                  this.myForm.markAllAsTouched()
+                  return
+                }
+              }
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 246 de 404 - Solucion de la tarea</h2>
+        <pre class="prettyprint">
+                
+            isValidField(field: string): boolean | null {
+                return this.myForm.controls[field].errors
+                       && this.myForm.controls[field].touched
+              }
+        </pre>
+
+        <pre class="prettyprint">
+                
+            &ltform [formGroup]="myForm" (ngSubmit)="onSave()" autocomplete="off">
+
+            &lt!-- Radio -->
+            &ltdiv class="row mb-3">
+                &ltlabel class="col-sm-3 col-form-label">Género&lt/label>
+                &ltdiv class="col-sm-9">
+        
+                    &ltdiv class="form-check">
+                        &ltinput formControlName="gender"
+                                class="form-check-input"
+                               type="radio"
+                               value="M"
+                               id="radioMasculino">
+                        &ltlabel class="form-check-label" for="radioMasculino">
+                          Masculino
+                        &lt/label>
+                    &lt/div>
+        
+                    &ltdiv class="form-check">
+                        &ltinput formControlName="gender"
+                               class="form-check-input"
+                               type="radio"
+                               value="F"
+                               id="radioFemenino">
+                        &ltlabel class="form-check-label" for="radioFemenino">
+                          Femenino
+                        &lt/label>
+                    &lt/div>
+        
+                &lt/div>
+            &lt/div>
+        
+            &lt!-- Switches -->
+            &ltdiv class="row mb-3">
+                &ltlabel class="col-sm-3 col-form-label">Notificaciones&lt/label>
+                &ltdiv class="col-sm-9">
+        
+                    &ltdiv class="form-check form-switch mt-2">
+                        &ltinput formControlName="wantNotifications"
+                               class="form-check-input"
+                               type="checkbox"
+                               id="flexSwitchCheckChecked">
+                        &ltlabel class="form-check-label" for="flexSwitchCheckChecked">Quiero recibir notificaciones&lt/label>
+                    &lt/div>
+        
+                &lt/div>
+            &lt/div>
+        
+            &lt!-- Switches -->
+            &ltdiv class="row mb-3">
+                &ltlabel class="col-sm-3 col-form-label">&lt/label>
+                &ltdiv class="col-sm-9">
+                    &ltdiv class="form-check">
+                        &ltinput formControlName="termsAndConditions" class="form-check-input"
+                               type="checkbox"
+                               id="flexCheckDefault">
+                        &ltlabel class="form-check-label" for="flexCheckDefault">
+                          Términos y condiciones de uso
+                        &lt/label>
+                      &lt/div>
+                      &ltspan *ngIf="isValidField('termsAndConditions')" class="form-text text-danger">
+                         Debe de aceptar las condiciones de uso
+                      &lt/span>
+        
+                &lt/div>
+            &lt/div>
+        </pre>
+
+        <pre class="prettyprint">
+                
+            public person = {
+                gender: 'F',
+                wantNotifications: false
+              }
+
+              ngOnInit(): void {
+                this.myForm.reset( this.person )
+            }
+
+            onSave(): void {
+                if (this.myForm.invalid) {
+                  this.myForm.markAllAsTouched()
+                  return
+                }
+            
+                const { termsAndConditions, ...newPerson } = this.myForm.value
+            
+                this.person = newPerson
+                console.log(this.myForm.value)
+                console.log(this.person)
+              }
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 247 de 404 - Formulario de Registro</h2>
+        <pre class="prettyprint">
+                
+            public myForm: FormGroup = this.fb.group({
+                name: ['', [ Validators.required ]],
+                email: ['', [ Validators.required ]],
+                username: ['', [ Validators.required ]],
+                password: ['', [ Validators.required, Validators.minLength(6) ]],
+                password2: ['', [ Validators.required ]],
+              })
+            
+              constructor(
+                private fb: FormBuilder
+              ) {}
+        </pre>
+
+        <pre class="prettyprint">
+                
+            &lth2>Validaciones Reactivas&lt/h2>
+            &lthr />
+            
+            &ltdiv class="row">
+              &ltdiv class="col">
+                &ltform [formGroup]="myForm" (ngSubmit)="onSubmit()" autocomplete="off">
+                  &lt!-- Nombre -->
+                  &ltdiv class="row mb-3">
+                    &ltlabel class="col-sm-3 col-form-label">Nombre&lt/label>
+                    &ltdiv class="col-sm-9">
+                      &ltinput
+                        formControlName="name"
+                        type="text"
+                        class="form-control"
+                        placeholder="Nombre del usuario"
+                      />
+            
+                      &ltspan class="form-text text-danger">
+                        Debe de ser en formato de nombre y apellido
+                      &lt/span>
+                    &lt/div>
+                  &lt/div>
+            
+                  &lt!-- Email -->
+                  &ltdiv class="row mb-3">
+                    &ltlabel class="col-sm-3 col-form-label">Email&lt/label>
+                    &ltdiv class="col-sm-9">
+                      &ltinput
+                        formControlName="email"
+                        type="email"
+                        class="form-control"
+                        placeholder="Email del usuario"
+                      />
+                      &ltspan class="form-text text-danger">
+                        mensaje de error del email
+                      &lt/span>
+                    &lt/div>
+                  &lt/div>
+            
+                  &lt!-- Username -->
+                  &ltdiv class="row mb-3">
+                    &ltlabel class="col-sm-3 col-form-label">Username&lt/label>
+                    &ltdiv class="col-sm-9">
+                      &ltinput
+                        formControlName="username"
+                        type="text"
+                        class="form-control"
+                        placeholder="Nombre código del usuario"
+                      />
+                      &ltspan class="form-text text-danger">
+                        El username no puede ser Strider
+                      &lt/span>
+                    &lt/div>
+                  &lt/div>
+            
+                  &lt!-- Password -->
+                  &ltdiv class="row mb-3">
+                    &ltlabel class="col-sm-3 col-form-label">Password&lt/label>
+                    &ltdiv class="col-sm-9">
+                      &ltinput
+                        formControlName="password"
+                        type="password"
+                        class="form-control"
+                        placeholder="Password de su cuenta"
+                      />
+            
+                      &ltspan class="form-text text-danger">
+                        La contraseña debe de ser mayor de 6 caracteres.
+                      &lt/span>
+                    &lt/div>
+                  &lt/div>
+            
+                  &lt!-- Password2 -->
+                  &ltdiv class="row mb-3">
+                    &ltlabel class="col-sm-3 col-form-label">Confirmar&lt/label>
+                    &ltdiv class="col-sm-9">
+                      &ltinput
+                        formControlName="password2"
+                        type="password"
+                        class="form-control"
+                        placeholder="Confirmar la contraseña"
+                      />
+            
+                      &ltspan class="form-text text-danger">
+                        Las contraseñas deben de ser iguales
+                      &lt/span>
+                    &lt/div>
+                  &lt/div>
+            
+                  &ltdiv class="row">
+                    &ltdiv class="col">
+                      &ltbutton class="btn btn-primary float-end" type="submit">Crear&lt/button>
+                    &lt/div>
+                  &lt/div>
+                &lt/form>
+              &lt/div>
+            &lt/div>
+            
+            &lth2>Form Valid: {{ myForm.valid }}&lt/h2>
+            &lth2>Form Status: {{ myForm.status }}&lt/h2>
+            &lth2>Form Pending: {{ myForm.pending }}&lt/h2>
+            &lth2>Form errors&lt/h2>
+            &ltpre>{{ myForm.errors | json }}&lt/pre>
+            
+            &lth5>Nombre&lt/h5>
+            &ltpre>{{ myForm.value.name | json }}&lt/pre>
+            
+            &lth5>Email&lt/h5>
+            &ltpre>{{ myForm.value.email | json }}&lt/pre>
+            
+            &lth5>Username&lt/h5>
+            &ltpre>{{ myForm.value.username | json }}&lt/pre>
+            
+            &lth5>Password&lt/h5>
+            &ltpre>{{ myForm.value.password | json }}&lt/pre>
+            
+            &lth5>Confirmar&lt/h5>
+            &ltpre>{{ myForm.value.password2 | json }}&lt/pre>
+            
+        </pre>
+      </article>
+
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 248 de 404 - Validator Functions</h2>
+        <pre class="prettyprint">
+                
+            import { FormControl } from "@angular/forms";
+
+            export const canBeStrider = ( control: FormControl ) => {
+            
+              const value: string = control.value.trim().toLowerCase()
+            
+              if (value === 'strider') {
+                return {
+                  noStrider: true
+                }
+              }
+            
+              return null
+            }
+            
+        </pre>
+
+        <pre class="prettyprint">
+                
+            public myForm: FormGroup = this.fb.group({
+                name: ['', [ Validators.required ]],
+                email: ['', [ Validators.required ]],
+                username: ['', [ Validators.required, canBeStrider ]],
+                password: ['', [ Validators.required, Validators.minLength(6) ]],
+                password2: ['', [ Validators.required ]],
+              })
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 249 de 404 - Validaciones de Email y Patrones</h2>
+        <p>
+            <a href="https://gist.github.com/Klerith/bdf52e3500b0a6c66cf0b4dcd61549ee">https://gist.github.com/Klerith/bdf52e3500b0a6c66cf0b4dcd61549ee</a>
+        </p>
+
+        <pre class="prettyprint">
+                
+            export const firstNameAndLastnamePattern: string = '([a-zA-Z]+) ([a-zA-Z]+)';
+            export const emailPattern: string = "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$";
+        </pre>
+
+        <pre class="prettyprint">
+                
+            import * as customValidators from 'src/app/shared/validators/validators';
+
+            ...
+            
+              public myForm: FormGroup = this.fb.group({
+                name: ['', [ Validators.required, Validators.pattern(customValidators.firstNameAndLastnamePattern) ]],
+                email: ['', [ Validators.required, Validators.pattern(customValidators.emailPattern) ]],
+                username: ['', [ Validators.required, customValidators.canBeStrider ]],
+                password: ['', [ Validators.required, Validators.minLength(6) ]],
+                password2: ['', [ Validators.required ]],
+              })
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 250 de 404 - Validator Service</h2>
+        <pre class="prettyprint">
+                
+            > ng g s shared/services/validators
+        </pre>
+
+        <pre class="prettyprint">
+                
+          export class ValidatorsService {
+            public firstNameAndLastnamePattern: string = '([a-zA-Z]+) ([a-zA-Z]+)';
+            public emailPattern: string = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
+          
+            constructor() {}
+          
+            public canBeStrider = (control: FormControl): ValidationErrors | null => {
+              const value: string = control.value.trim().toLowerCase();
+          
+              if (value === 'strider') {
+                return {
+                  noStrider: true,
+                };
+              }
+          
+              return null;
+            };
+          
+            isValidField(form: FormGroup, field: string): boolean | null {
+              return form.controls[field].errors && form.controls[field].touched;
+            }
+          }
+        </pre>
+
+        <pre class="prettyprint">
+                
+          public myForm: FormGroup = this.fb.group({
+            name: ['', [ Validators.required, Validators.pattern(this.validatorsService.firstNameAndLastnamePattern) ]],
+            email: ['', [ Validators.required, Validators.pattern(this.validatorsService.emailPattern) ]],
+            username: ['', [ Validators.required, this.validatorsService.canBeStrider ]],
+            password: ['', [ Validators.required, Validators.minLength(6) ]],
+            password2: ['', [ Validators.required ]],
+          })
+        
+          constructor(
+            private fb: FormBuilder,
+            private validatorsService: ValidatorsService
+          ) {}
+
+          isValidField( field: string ) {
+            return this.validatorsService.isValidField( this.myForm, field )
+          }
+
+          onSubmit() {
+            if (this.myForm.invalid) {
+              this.myForm.markAllAsTouched()
+              return
+            }
+        
+            console.log(this.myForm.value)
+          }
+        </pre>
+
+        <pre class="prettyprint">
+                
+          &ltspan class="form-text text-danger" *ngIf="isValidField('name')">
+          &ltspan class="form-text text-danger" *ngIf="isValidField('email')">
+          &ltspan class="form-text text-danger" *ngIf="isValidField('username')">
+          &ltspan class="form-text text-danger" *ngIf="isValidField('password')">
+          &ltspan class="form-text text-danger" *ngIf="isValidField('password2')">
+          
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 251 de 404 - Validadores asincronos</h2>
+        <pre class="prettyprint">
+                
+          export class EmailValidator implements AsyncValidator {
+            public emailPattern: string = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
+          
+            constructor() {}
+          
+            validate(
+              control: AbstractControl<any, any>
+            ): Observable&ltValidationErrors | null> {
+              const email = control.value;
+              console.log({ email });
+              return of({
+                emailTaken: true,
+              }).pipe(
+                delay(5000)
+              )
+            }
+          }
+        </pre>
+
+        <pre class="prettyprint">
+                
+          public myForm: FormGroup = this.fb.group({
+            name: ['', [ Validators.required, Validators.pattern(this.validatorsService.firstNameAndLastnamePattern) ]],
+            email: [
+              '',
+              [ Validators.required, Validators.pattern(this.validatorsService.emailPattern) ],
+              // [ new EmailValidator() ]
+              [ this.emailValidator ]
+            ],
+            username: ['', [ Validators.required, this.validatorsService.canBeStrider ]],
+            password: ['', [ Validators.required, Validators.minLength(6) ]],
+            password2: ['', [ Validators.required ]],
+          })
+        
+          constructor(
+            private fb: FormBuilder,
+            private validatorsService: ValidatorsService,
+            private emailValidator: EmailValidator
+          ) {}
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 252 de 404 - Elaborar el validador de correo</h2>
+        <pre class="prettyprint">
+                
+          export class EmailValidator implements AsyncValidator {
+
+            // constructor( private http: HttpClient) {}
+            constructor() {}
+          
+            validate(
+              control: AbstractControl&ltany, any>
+            ): Observable&ltValidationErrors | null> {
+              const email = control.value;
+          
+              const httpCallObservable = new Observable&ltValidationErrors | null>( (subscriber) => {
+          
+                console.log({ email });
+          
+                if ( email === 'fernando@google.com') {
+                  subscriber.next({ emailTaken: true })
+                  subscriber.complete()
+                  // return
+                }
+          
+                subscriber.next( null )
+                subscriber.complete()
+          
+              }).pipe( delay( 5000 ))
+          
+              return httpCallObservable
+            }
+          
+            // validate(
+            //   control: AbstractControl&ltany, any>
+            // ): Observable&ltValidationErrors | null> {
+            //   const email = control.value;
+            //   console.log({ email });
+            //   return of({
+            //     emailTaken: true,
+            //   }).pipe(delay(5000));
+            // }
+          
+            // validate(
+            //   control: AbstractControl&ltany, any>
+            // ): Observable&ltValidationErrors | null> {
+            //   const email = control.value;
+            //   console.log({ email });
+          
+            //   return this.http.get&ltany[]>(`http://localhost:3000/users?q=${email}`).pipe(
+            //     map((resp) => {
+            //       return resp.length === 0 ? null : { emailTaken: true };
+            //     })
+            //   );
+            // }
+          }
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 253 de 404 - Verificar que dos campos sean iguales</h2>
+        <pre class="prettyprint">
+                
+          isFieldOneEqualFieldTwo(field1: string, field2: string) {
+            return (formGroup: AbstractControl): ValidationErrors | null => {
+              const fieldValue1 = formGroup.get(field1)?.value
+              const fieldValue2 = formGroup.get(field2)?.value
+        
+              if (fieldValue1 !== fieldValue2 ) {
+                formGroup.get(field2)?.setErrors({ notEqual: true })
+                return {
+                  notEqual: true
+                }
+              }
+        
+              formGroup.get(field2)?.setErrors( null )
+        
+              return null
+            }
+          }
+        </pre>
+
+        <pre class="prettyprint">
+                
+          public myForm: FormGroup = this.fb.group({
+            name: ['', [ Validators.required, Validators.pattern(this.validatorsService.firstNameAndLastnamePattern) ]],
+            email: [
+              '',
+              [ Validators.required, Validators.pattern(this.validatorsService.emailPattern) ],
+              // [ new EmailValidator() ]
+              [ this.emailValidator ]
+            ],
+            username: ['', [ Validators.required, this.validatorsService.canBeStrider ]],
+            password: ['', [ Validators.required, Validators.minLength(6) ]],
+            password2: ['', [ Validators.required ]],
+          }, {
+            validators: [
+              this.validatorsService.isFieldOneEqualFieldTwo('password', 'password2')
+            ]
+          })
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 254 de 404 - Código fuente de la sección</h2>
+        <p>
+          <a href="https://github.com/Klerith/angular-reactive-forms/tree/fin-seccion-18">https://github.com/Klerith/angular-reactive-forms/tree/fin-seccion-18</a>
+        </p>
+      </article>
+    </section>
+
+
+
+
+
+
+
+
+
+
+
+</main>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</body>
+
+</html>

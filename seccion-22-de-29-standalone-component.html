@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+<title>Sección 22 de 29 - Standalone components</title>
+</head>
+
+<body>
+<header class="text-center">
+<h1>Sección 22 de 29 - Standalone components</h1>
+</header>
+<main class="container">
+    <hr />
+
+    <div class="row">
+      <div class="col">
+        <div class="list-group">
+          <a
+            href="./index.html"
+            class="list-group-item list-group-item-action"
+          >
+            Volver
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 300 de 404 - Introducción a la sección</h2>
+        
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 301 de 404 - Temas puntueales de la sección</h2>
+        
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 302 de 404 - Continuación de la sección MapsApp</h2>
+        
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 303 de 404 - Standalone como página</h2>
+        <pre class="prettyprint">
+                
+            > ng g c alone/pages/alonePage --standalone
+        </pre>
+
+        <pre class="prettyprint">
+                
+            import { Component } from '@angular/core';
+
+            @Component({
+              standalone: true,
+              templateUrl: './alone-page.component.html',
+              styleUrls: ['./alone-page.component.css']
+            })
+            export class AlonePageComponent {
+            
+            }
+            
+        </pre>
+
+        <pre class="prettyprint">
+                
+          &ltdiv class="row mt-3">
+            &ltdiv class="col-2">&lt/div>
+            &ltdiv class="col-10">
+          
+              &lth1>StandAlone Component - Page&lt/h1>
+              &lthr>
+          
+              &ltdiv class="row">
+                &ltdiv class="col">
+                  &ltp>*Este componente no necesita ser importado en módulos&lt/p>
+                  &ltp>Es porque es su propio modulo&lt/p>
+                &lt/div>
+              &lt/div>
+            &lt/div>
+          &lt/div>
+          
+        </pre>
+
+        <pre class="prettyprint">
+                
+            const routes: Routes = [
+                {
+                    path: 'maps',
+                    loadChildren: () => import('./maps/maps.module').then( m => m.MapsModule)
+                },
+                {
+                    path: 'alone',
+                    loadComponent: () => import('./alone/pages/alone-page/alone-page.component').then( m => m.AlonePageComponent)
+                },
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 304 de 404 - StandAlone - Como componente reutilizable</h2>
+        <pre class="prettyprint">
+                
+            > ng g c alone/components/counterAlone --standalone
+        </pre>
+        
+        <pre class="prettyprint">
+                
+            @Input()
+            public counter: number = 10;
+        </pre>
+
+        <pre class="prettyprint">
+                
+            &lth1>Counter {{ counter }}&lt/h1>
+
+            &ltbutton class="btn btn-primary" (click)="counter = counter + 1">
+              +1
+            &lt/button>
+            
+        </pre>
+
+        <pre class="prettyprint">
+                
+            @Component({
+                standalone: true,
+                imports: [CounterAloneComponent],
+                templateUrl: './alone-page.component.html',
+                styleUrls: ['./alone-page.component.css']
+              })
+        </pre>
+
+        <pre class="prettyprint">
+                
+            &ltcounter-alone [counter]="10">&lt/counter-alone>
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 305 de 404 - Standalone en modulos tradicionales</h2>
+        <pre class="prettyprint">
+                
+            @NgModule({
+                declarations: [
+                  ...
+                ],
+                imports: [
+                  ...
+                  CounterAloneComponent
+                ]
+              })
+        </pre>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 306 de 404 - Componente tradicional a un standalone</h2>
+        <p>
+            Esta sección era una tarea, era convertir el sidemenu en un componente alone
+            <br>
+            Para esto hay que ponerlo como standalone, e importar el modulo de rutas y el comun.
+            <br>
+            en el modulo de maps quitarlo de las declaraciones y ponerlo en los imports
+            <br>
+            si lo queremos poner en el alone page... se debe importar ahí
+        </p>
+      </article>
+    </section>
+
+    <hr>
+    
+    <section class="row">
+      <article class="col">
+        <h2>Sección 307 de 404 - Codigo fuente de la seccion</h2>
+        <p>
+            <a href="https://github.com/Klerith/angular-mapbox/tree/fin-seccion-22">https://github.com/Klerith/angular-mapbox/tree/fin-seccion-22</a>
+        </p>
+        
+      </article>
+    </section>
+
+
+
+
+
+
+
+
+
+
+
+</main>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</body>
+
+</html>

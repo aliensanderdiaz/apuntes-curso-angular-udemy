@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+    <title>Sección 23 de 29 - Directivas personalizadas de Angular</title>
+  </head>
+
+  <body>
+    <header class="text-center">
+      <h1>Sección 23 de 29 - Directivas personalizadas de Angular</h1>
+    </header>
+    <main class="container">
+      <hr />
+
+      <div class="row">
+        <div class="col">
+          <div class="list-group">
+            <a
+              href="./index.html"
+              class="list-group-item list-group-item-action"
+            >
+              Volver
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <hr />
+
+      <section class="row">
+        <article class="col">
+          <h2>Sección 308 de 404 - Introducción a la sección</h2>
+        </article>
+      </section>
+
+      <hr />
+
+      <section class="row">
+        <article class="col">
+          <h2>Sección 309 de 404 - Temas puntuales de la sección</h2>
+          <p>
+            ¿Qué veremos en esta sección? En esta sección les enseñaré a crear
+            sus propias directivas personalizadas en Angular para que puedan
+            expandir su comportamiento. La idea será crear una directiva robusta
+            que nos sirva para resumir la forma cómo los errores en los
+            formularios son mostrados, y así no tener que colocar infinidad de
+            condiciones dentro del HTML. Esta directiva que crearemos, es de uso
+            real y dará una buena idea de qué podemos hacer con ellas.
+          </p>
+        </article>
+      </section>
+
+      <hr />
+
+      <section class="row">
+        <article class="col">
+          <h2>Sección 310 de 404 - Inicio del proyecto Directivas + Signals</h2>
+          <p>
+            Esta sección sirve con angular 16+
+          </p>
+          <pre class="prettyprint">
+                  
+            > npm i -g @angular/cli
+            > ng new directiveSignals
+          </pre>
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 311 de 404 - Estructura de la aplicación</h2>
+          <pre class="prettyprint">
+                  
+           > ng g m products --routing
+           > ng g c products/pages/productPage --skip-selector
+          </pre>
+
+          <pre class="prettyprint">
+                  
+            const routes: Routes = [
+            {
+              path: '',
+              children: [
+                { path: 'product', component: ProductPageComponent },
+                { path: '**', redirectTo: 'product' },
+              ]
+            }
+          ];
+          </pre>
+
+          <pre class="prettyprint">
+                  
+            const routes: Routes = [
+            {
+              path: 'products',
+              loadChildren: () => import('./products/products.module').then(m => m.ProductsModule)
+            },
+            {
+              path: '**',
+              redirectTo: 'products'
+            }
+          ];
+          </pre>
+
+          <pre class="prettyprint">
+                  
+            &lth1>Agregar Producto&lt/h1>
+            &lthr>
+            
+            &ltform>
+            
+              &ltdiv class="row g-3 align-items-center mb-3">
+                &ltdiv class="col-auto">
+                  &ltlabel>Nombre: &lt/label>
+                &lt/div>
+            
+                &ltdiv class="col-auto">
+                  &ltinput type="text" class="form-control">
+                &lt/div>
+            
+                &ltdiv class="col-auto">
+                  &ltspan>Algo de información&lt/span>
+                &lt/div>
+              &lt/div>
+            
+              &ltdiv class="row">
+                &ltdiv class="col">
+                  &ltbutton class="btn btn-primary">Cambiar color&lt/button>
+                &lt/div>
+              &lt/div>
+            &lt/form>
+            
+          </pre>
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 312 de 404 - Formulario reactivo tradicional</h2>
+          <pre class="prettyprint">
+                  
+            private fb = inject( FormBuilder )
+
+            public color: string = 'green'
+          
+            public myForm: FormGroup = this.fb.group({
+              name: ['', [Validators.required, Validators.minLength(6), Validators.email]]
+            })
+          
+            changeColor() {
+              this.color = '#xxxxxx'.replace(/x/g, y=>(Math.random()*16|0).toString(16));
+            }
+          </pre>
+
+          <pre class="prettyprint">
+                  
+            &ltform [formGroup]="myForm">
+
+            ...
+
+            &ltinput formControlName="name" type="text" class="form-control">
+
+            ...
+      
+            &ltbutton (click)="changeColor()" class="btn btn-primary">Cambiar color&lt/button>
+
+            ...
+      
+            &ltpre class="mt-5">{{ myForm.get('name')?.errors | json }}&lt/pre>
+            
+            &ltp>Color: {{ color }}&lt/p>
+          </pre>
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 313 de 404 - Custom Label - Directiva personalizada</h2>
+          <pre class="prettyprint">
+                  
+            > ng g m shared
+            > ng g directive shared/directives/customLabel --flat
+          </pre>
+
+          <p>Hacemos las respectivas declaracions,  exportaciones e importaciones en los modulos</p>
+
+          <pre class="prettyprint">
+                  
+            import { Directive, OnInit, ElementRef } from '@angular/core';
+
+            @Directive({
+              selector: '[customLabel]'
+            })
+            export class CustomLabelDirective implements OnInit {
+            
+              private htmlElement?: ElementRef<HTMLElement>
+            
+              constructor(
+                private el: ElementRef<HTMLElement>
+              ) {
+                console.info('Constructor de la directiva')
+                this.htmlElement = el
+                this.htmlElement.nativeElement.innerHTML = 'Hola mundo'
+              }
+            
+              ngOnInit(): void {
+                  console.info('On init en la directiva')
+              }
+            
+            }
+            
+          </pre>
+
+          <pre class="prettyprint">
+                  
+            &ltspan customLabel>&lt/span>
+          </pre>    
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 314 de 404 - Directive Input - Cambiar el color del host</h2>
+          <pre class="prettyprint">
+                  
+            private htmlElement?: ElementRef&ltHTMLElement>
+                private _color: string = 'red'
+              
+                @Input() set color( value: string ){
+                  this._color = value
+                  this.setStyle()
+                }
+              
+                constructor(
+                  private el: ElementRef&ltHTMLElement>
+                ) {
+                  // console.info('Constructor de la directiva')
+                  this.htmlElement = el
+                  // this.htmlElement.nativeElement.innerHTML = 'Hola mundo'
+                }
+              
+                ngOnInit(): void {
+                    // console.info('On init en la directiva')
+                    this.setStyle()
+                }
+              
+                setStyle() {
+                  if (!this.htmlElement) return
+                  this.htmlElement!.nativeElement.style.color = this._color
+                }
+          </pre>
+
+          <pre class="prettyprint">
+                  
+            &ltspan customLabel [color]="color">Temporal&lt/span>
+          </pre>
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 315 de 404 - Cambiar el mensaje de la etiqueta</h2>
+          <pre class="prettyprint">
+
+            private _errors?: ValidationErrors | null | undefined
+          
+            @Input() set errors(value: ValidationErrors | null | undefined) {
+              this._errors = value
+              // console.log({ value })
+              this.setErrorMessage()
+            }
+
+            ...
+                  
+            setErrorMessage() {
+                if (!this.htmlElement) return
+                if (!this._errors) {
+                  this.htmlElement.nativeElement.innerText = ''
+                  return
+                }
+            
+                const errors = Object.keys(this._errors)
+            
+                if (errors.includes('required')) {
+                  this.htmlElement.nativeElement.innerText = 'Este campo es requerido'
+                  return
+                }
+          </pre>
+
+          <pre class="prettyprint">
+                  
+            &ltspan customLabel [color]="color" [errors]="myForm.get('name')?.errors">Temporal&lt/span>
+          </pre>
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 316 de 404 - Solucion de la tarea</h2>
+          <pre class="prettyprint">
+                  
+            if (errors.includes('minlength')) {
+                const errorMinLength = this._errors['minlength']
+                this.htmlElement.nativeElement.innerText = `Este campo requiere ${ errorMinLength.requiredLength } caracteres, te faltan ${  errorMinLength.requiredLength - errorMinLength.actualLength }`
+                return
+              }
+          
+              if (errors.includes('email')) {
+                this.htmlElement.nativeElement.innerText = 'Este campo debe ser un email'
+                return
+              }
+          </pre>
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 317 de 404 - Codigo fuente de la sección</h2>
+          <p>
+            <a href="https://github.com/Klerith/angular-signal-directives/tree/fin-seccion-23">https://github.com/Klerith/angular-signal-directives/tree/fin-seccion-23</a>
+          </p>
+        </article>
+      </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </main>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
