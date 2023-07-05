@@ -158,9 +158,423 @@
       <section class="row">
         <article class="col">
           <h2>Sección 337 de 404 - Variables de entorno</h2>
+          <pre class="prettyprint">
           
+              > npm i @nestjs/config
+          </pre>
+
+          <pre class="prettyprint">
+          
+            @Module({
+              imports: [
+                ConfigModule.forRoot(),
+                MongooseModule.forRoot(process.env.MONGO_URI),
+          </pre>
         </article>
       </section>
+
+      <section class="container">
+          <h3>Sección 338 de 404 - Crear modelo y esquema</h3>
+          <pre class="prettyprint">
+
+            // user.entity.ts
+          
+            import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose"
+
+            @Schema()
+            export class User {
+                // _id: string
+                
+                @Prop({ unique: true, required: true })
+                email: string
+                
+                @Prop({ required: true })
+                name: string
+                
+                @Prop({ minlength: 6, required: true })
+                password: string
+                
+                @Prop({ default: true })
+                isActive: Boolean
+                
+                @Prop({ type: [String], default: ['user'] })
+                roles: string[]
+            }
+             export const userSchema = SchemaFactory.createForClass( User )
+          </pre>
+
+          <pre class="prettyprint">
+
+            // auth.module.ts
+          
+            imports: [
+              MongooseModule.forFeature([
+                { name: User.name, schema: userSchema }
+              ])
+            ]
+          </pre>
+      </section>
+      <hr>
+
+      <section class="container">
+          <h3>Sección 339 de 404 - DTO - Data Transfer Object</h3>
+          <pre class="prettyprint">
+          
+            export class CreateUserDto {
+              email: string
+              name: string
+              password: string
+          }
+          
+          </pre>
+
+          <pre class="prettyprint">
+          
+            @Post()
+            create(@Body() createUserDto: CreateUserDto) {
+              return this.authService.create(createUserDto);
+            }
+          </pre>
+
+          <pre class="prettyprint">
+          
+            export class AuthService {
+              create(createUserDto: CreateUserDto) {
+                console.log({ createUserDto })
+                return 'This action adds a new auth';
+              }
+          </pre>
+
+          <pre class="prettyprint">
+          
+              > npm i class-validator class-transformer
+          </pre>
+
+          <pre class="prettyprint">
+          
+            async function bootstrap() {
+              const app = await NestFactory.create(AppModule);
+            
+              app.useGlobalPipes(
+                new ValidationPipe({
+                  whitelist: true,
+                  forbidNonWhitelisted: true
+                })
+              )
+              await app.listen(3000);
+            }
+            bootstrap();
+          </pre>
+
+          <pre class="prettyprint">
+          
+            import { IsEmail, IsString, MinLength } from "class-validator"
+
+            export class CreateUserDto {
+            
+                @IsEmail()
+                email: string
+            
+                @IsString()
+                name: string
+            
+                @MinLength(6)
+                password: string
+            }
+          </pre>
+      </section>
+      <hr>
+
+      <section class="container">
+          <h3>Sección 340 de 404 - Crear un registro de base de datos</h3>
+          <pre class="prettyprint">
+            export class AuthService {
+
+              constructor(
+                @InjectModel(User.name)
+                private userModel: Model<User>,
+            
+              ) { }
+            
+              async create(createUserDto: CreateUserDto): Promise<User> {
+                try {
+                  const newUser = new this.userModel(createUserDto)
+                  // TODO: Encriptar la contraseña
+            
+            
+                  // TODO: Guardar el Usuario
+            
+            
+                  // TODO: Generar el JWT
+                  return await newUser.save()
+                } catch (error) {
+                  if (error.code === 11000) {
+                    throw new BadRequestException(`${ createUserDto.email } already exists!`)
+                  }
+                  throw new InternalServerErrorException('Something terrible happen!!!')
+                }
+              }
+          </pre>
+      </section>
+      <hr>
+
+      <section class="container">
+          <h3>Sección 341 de 404 - Encriptar la contraseña</h3>
+          <pre class="prettyprint">
+          
+              > npm i bcryptjs
+              > npm i @types/bcryptjs -D
+          </pre>
+
+          <pre class="prettyprint">
+            import * as bcrypt from 'bcryptjs'
+
+            ...
+          
+            const { password, ...userData } = createUserDto
+            const newUser = new this.userModel({
+              password: bcrypt.hashSync( password, 10 ),
+              ...userData
+            })
+            
+            await newUser.save()
+      
+            const { password: _, ...user } = newUser.toJSON()
+      
+            return user
+          </pre>
+      </section>
+      <hr>
+
+      <section class="container">
+          <h3>Sección 342 de 404 - Login - Verificar correo y contraseña</h3>
+          <pre class="prettyprint">
+          
+            export class AuthController {
+              
+              ...
+            
+              @Post('/login')
+              login() {
+                return 'login'
+              }
+            
+          </pre>
+
+          <pre class="prettyprint">
+          
+            import { IsEmail, MinLength } from "class-validator"
+
+            export class LoginDto {
+            
+                @IsEmail()
+                email: string
+            
+                @MinLength(6)
+                password: string
+            }
+            
+          </pre>
+
+          <pre class="prettyprint">
+          
+            @Post('/login')
+            login(@Body() loginDto: LoginDto) {
+              return this.authService.login(loginDto)
+            }
+          </pre>
+
+          <pre class="prettyprint">
+          
+            async login(loginDto: LoginDto) {
+
+              try {
+                const { password, email } = loginDto
+            
+                const userDB = await this.userModel.findOne({ email })
+            
+                if (!userDB) throw new UnauthorizedException('No coinciden las credenciales')
+          
+                const isValid = bcrypt.compareSync( password, userDB.password )
+                
+                if (!isValid) throw new UnauthorizedException('No coinciden las credenciales *')
+          
+                const { password:_, ...userReturn } = userDB.toJSON()
+            
+                // TODO: Devolver usuario y token
+                return { user: userReturn};
+          </pre>
+      </section>
+      <hr>
+
+      <section class="container">
+          <h3>Sección 343 de 404 - Generar JWT</h3>
+          <pre class="prettyprint">
+          
+              > npm i @nestjs/jwt
+          </pre>
+
+          <pre class="prettyprint">
+          
+            export interface JwtPayload {
+              id: string
+              iat?: number
+              exp?: number
+          }
+          </pre>
+
+          <pre class="prettyprint">
+
+            ...
+
+            import { JwtService } from '@nestjs/jwt';
+            import { JwtPayload } from './interfaces/jwt-payload';
+
+            ...
+
+            constructor(
+              @InjectModel(User.name)
+              private userModel: Model<User>,
+              private jwtService: JwtService
+            ) { }
+
+            ...
+
+            async login(loginDto: LoginDto) {
+
+              try {
+                const { password, email } = loginDto
+            
+                const userDB = await this.userModel.findOne({ email })
+            
+                if (!userDB) throw new UnauthorizedException('No coinciden las credenciales')
+          
+                const isValid = bcrypt.compareSync( password, userDB.password )
+                
+                if (!isValid) throw new UnauthorizedException('No coinciden las credenciales *')
+          
+                const { password:_, ...userReturn } = userDB.toJSON()
+            
+                // TODO: Devolver usuario y token
+                return { user: userReturn, token: this.getJwtToken({ id: userDB.id })};
+
+            ...
+          
+            getJwtToken(payload: JwtPayload) {
+              const token = this.jwtService.sign( payload )
+              return token
+            }
+          </pre>
+
+          <pre class="prettyprint">
+
+            // auth.module.ts
+
+            import { JwtModule } from '@nestjs/jwt';
+            import { ConfigModule } from '@nestjs/config';
+
+            ...
+          
+            imports: [
+              ConfigModule.forRoot(),
+          
+              MongooseModule.forFeature([
+                { name: User.name, schema: UserSchema }
+              ]),
+          
+              JwtModule.register({
+                global: true,
+                secret: process.env.JWT_SEED,
+                signOptions: { expiresIn: '6h'}
+              })
+            ]
+          </pre>
+
+          <pre class="prettyprint">
+          
+            // .env 
+
+            MONGO_URI=mongodb://localhost:27017/nest
+            JWT_SEED=gdfffftye@·~r66ytyu6uhhdfytg.@
+          </pre>
+      </section>
+      <hr>
+
+      <section class="container">
+          <h3>Sección 344 de 404 - Registro de usuario e interfaces</h3>
+          <pre class="prettyprint">
+          
+            import { User } from "../entities/user.entity";
+
+            export interface LoginRespose {
+                user: User
+                token: string
+            }
+          </pre>
+      </section>
+      <hr>
+
+      <section class="container">
+          <h3>Sección 345 de 404 - Solucion de la tarea</h3>
+          <pre class="prettyprint">
+          
+            import { IsEmail, IsString, MinLength } from "class-validator"
+
+            export class RegisterUserDto {
+            
+                @IsEmail()
+                email: string
+            
+                @IsString()
+                name: string
+            
+                @MinLength(6)
+                password: string
+            }
+          </pre>
+
+          <pre class="prettyprint">
+          
+            export * from './create-user.dto'
+            export * from './login.dto'
+            export * from './register-user.dto'
+            export * from './update-auth.dto'
+          </pre>
+
+          <pre class="prettyprint">
+          
+            @Schema()
+            export class User {
+                _id: string
+
+                ...
+          </pre>
+
+          <pre class="prettyprint">
+
+            import { CreateUserDto, UpdateAuthDto, LoginDto, RegisterUserDto } from './dto';
+
+            ...
+          
+            @Post('/register')
+            register(@Body() registerDto: RegisterUserDto) {
+              return this.authService.register(registerDto)
+            }
+          </pre>
+
+          <pre class="prettyprint">
+          
+            async register(registerUserDto: RegisterUserDto): Promise&ltLoginRespose> {
+              const user = await this.create(registerUserDto)
+              const token = this.getJwtToken({ id: user._id })
+          
+              return {
+                user, token
+              }
+            }
+          </pre>
+      </section>
+      <hr>
 
 
 
