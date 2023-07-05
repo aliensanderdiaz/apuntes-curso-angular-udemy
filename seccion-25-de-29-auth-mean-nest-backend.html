@@ -576,7 +576,136 @@
       </section>
       <hr>
 
+      <section class="container">
+          <h3>Sección 346 de 404 - Proteger Rutas con Autenticación</h3>
 
+          <pre class="prettyprint">
+          
+              > nest g gu auth/guards/auth
+          </pre>
+
+          <pre class="prettyprint">
+          
+            @Injectable()
+            export class AuthGuard implements CanActivate {
+            
+              constructor(
+                private jwtService: JwtService
+              ) {}
+            
+              canActivate( context: ExecutionContext ): Promise&ltboolean> {
+            
+                const request = context.switchToHttp().getRequest()
+                const token = this.extractTokenFromHeader( request )
+                console.log({ token })
+                return Promise.resolve( true );
+              }
+            
+              private extractTokenFromHeader(request: Request): string | undefined {
+                const [type, token] = request.headers['authorization']?.split(' ') ?? []
+                return type === 'Bearer' ? token : undefined
+              }
+            }
+          </pre>
+
+          <pre class="prettyprint">
+          
+            @UseGuards( AuthGuard )
+            @Get()
+            findAll() {
+              return this.authService.findAll();
+            }
+          
+          </pre>
+
+          <pre class="prettyprint">
+          
+            findAll(): Promise&ltUser[]> {
+              return this.userModel.find();
+            }
+          </pre>
+          
+      </section>
+      <hr>
+
+      <section class="container">
+          <h3>Sección 347 de 404 - Validar JWT y obtener usuario</h3>
+
+          <pre class="prettyprint">
+          
+            async findUserById(id: string): Promise&ltUser> {
+              const user = await this.userModel.findById( id )
+              const { password, ...rest } = user.toJSON()
+              return rest
+            }
+          </pre>
+
+          <pre class="prettyprint">
+          
+            constructor(
+              private jwtService: JwtService,
+              private authService: AuthService
+            ) { }
+          
+            async canActivate(context: ExecutionContext): Promise&ltboolean> {
+          
+              const request = context.switchToHttp().getRequest()
+              const token = this.extractTokenFromHeader(request)
+          
+              if (!token) {
+                throw new UnauthorizedException('There is no bearer token authorization')
+              }
+          
+              try {
+                const payload = await this.jwtService.verifyAsync&ltJwtPayload>(token, { secret: process.env.JWT_SEED })
+                const user = await this.authService.findUserById( payload.id )
+                if (!user) throw new UnauthorizedException('User does not exists')
+                if (!user.isActive) throw new UnauthorizedException('User is not active')
+                request['user'] = user
+              } catch (error) {
+                throw new UnauthorizedException('Token is no ok')
+              }
+              return Promise.resolve(true);
+            }
+          </pre>
+
+          <pre class="prettyprint">
+          
+            @UseGuards( AuthGuard )
+            @Get()
+            findAll( @Request() req: Request ) {
+              const user = req['user']
+              console.log({ user })
+              return this.authService.findAll();
+            }
+          </pre>
+      </section>
+      <hr>
+
+      <section class="container">
+          <h3>Sección 348 de 404 - Tarea - Generar un nuevo token</h3>
+          <pre class="prettyprint">
+          
+            @UseGuards( AuthGuard )
+            @Get('/check-token')
+            checkToken( @Request() req: Request ) {
+              const user = req['user'] as User
+              const token = this.authService.getJwtToken({ id: user._id })
+              return {
+                user, token
+              };
+            }
+          </pre>
+      </section>
+      <hr>
+
+      <section class="container">
+          <h3>Sección 349 de 404 - Código fuente de la sección</h3>
+          <p>
+            <a href="https://github.com/Klerith/angular-nest-backend/tree/fin-seccion-25">https://github.com/Klerith/angular-nest-backend/tree/fin-seccion-25</a>
+          </p>
+      </section>
+      <hr>
 
 
 
