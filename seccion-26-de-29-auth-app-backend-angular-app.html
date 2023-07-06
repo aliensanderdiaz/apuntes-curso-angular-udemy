@@ -134,9 +134,70 @@
 
         <section class="container">
             <h3>Sección 356 de 404 - Formulario de inicio de sesión</h3>
+            <pre class="prettyprint">
+                    
+                private fb = inject(FormBuilder)
+
+                public myForm: FormGroup = this.fb.group({
+                  email: ['', [Validators.required, Validators.email]],
+                  password: ['', [Validators.required, Validators.minLength(6)]],
+                })
+              
+                login() {
+                  console.log( this.myForm.value )
+                }
+            </pre>
+
+            <pre class="prettyprint">
+                    
+            &ltform class="login100-form"
+                [formGroup]="myForm"
+                (ngSubmit)="login()"
+                  autocomplete="off">
             
+                    &ltinput class="input100"
+                           type="email"
+                           formControlName="email"
+                           placeholder="Correo electrónico">
+
+                    &ltinput class="input100"
+                           type="password"
+                           formControlName="password"
+                           placeholder="Ingrese su contraseña">
+
+                        &ltbutton class="login100-form-btn"
+                                [disabled]="myForm.invalid"
+                                type="submit">
+                            Login
+                        &lt/button>
+
+            &lt/form>
+            
+            </pre>
         </section>
         <hr>
+
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 357 de 404 - AuthService</h2>
+            <pre class="prettyprint">
+                    
+                private readonly baseUrl: string = environment.baseUrl
+                private http = inject(HttpClient)
+              
+                private _currentUser = signal&ltUser|null>(null)
+                private _authStatus = signal&ltAuthStatus>()
+              
+                constructor() { }
+              
+                login(email: string, password: string) {
+                  return of(true)
+                }
+            </pre>
+          </article>
+        </section>
 
 
 
