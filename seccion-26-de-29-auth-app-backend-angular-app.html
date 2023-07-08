@@ -199,6 +199,488 @@
           </article>
         </section>
 
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 358 de 404 - Tipos e interfaces</h2>
+            <pre class="prettyprint">
+                    
+                export interface User {
+                    _id:      string;
+                    email:    string;
+                    name:     string;
+                    isActive: boolean;
+                    roles:    string[];
+                  }
+            </pre>
+
+            <pre class="prettyprint">
+                    
+                export enum AuthStatus {
+                    checking         = 'checking',
+                    authenticated    = 'authenticated',
+                    notAuthenticated = 'notAuthenticated',
+                  }
+            </pre>
+
+            <pre class="prettyprint">
+                    
+                import { User } from './user.interface';
+
+                export interface CheckTokenResponse {
+                  user:  User;
+                  token: string;
+                }
+            </pre>
+
+            <pre class="prettyprint">
+                    
+                import { User } from './user.interface';
+
+                export interface LoginResponse {
+                  user:  User;
+                  token: string;
+                }
+            </pre>
+
+            <pre class="prettyprint">
+                    
+                export * from './auth-status.enum'
+                export * from './login-response.interface';
+                export * from './user.interface';
+                export * from './check-token.response';
+            </pre>
+          </article>
+        </section>
+
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 359 de 404 - Post - Login</h2>
+            <pre class="prettyprint">
+                    
+                export class AuthService {
+
+                    private readonly baseUrl: string = environment.baseUrl
+                    private http = inject(HttpClient)
+                  
+                    private _currentUser = signal&ltUser|null>(null)
+                    private _authStatus = signal&ltAuthStatus>( AuthStatus.checking )
+                  
+                    // Al mundo exterior
+                    public currentUser = computed(() => this._currentUser())
+                    public authStatus = computed(() => this._authStatus())
+                  
+                    constructor() { }
+                  
+                    login(email: string, password: string): Observable&ltboolean> {
+                  
+                      const url = `${ this.baseUrl }/auth/login`
+                      const body = { email, password }
+                  
+                      return this.http.post&ltLoginResponse>( url, body )
+                        .pipe(
+                          tap( ({ user, token }) => {
+                            this._currentUser.set( user )
+                            this._authStatus.set( AuthStatus.authenticated )
+                            localStorage.setItem('token', token)
+                            console.log({ user, token })
+                          }),
+                          map( () => true )
+                        )
+                    }
+                  }
+            </pre>
+
+            <pre class="prettyprint">
+                    
+                login() {
+                    console.log( this.myForm.value )
+                    const { email, password } = this.myForm.value
+                    this.authService.login( email, password )
+                      .subscribe( data => console.log({ data }))
+                  }
+            </pre>
+
+            <p>En el backend en el main.ts</p>
+
+            <pre class="prettyprint">
+                    
+                app.enableCors()
+            </pre>
+          </article>
+        </section>
+
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 360 de 404 - Manejo de errores</h2>
+            <pre class="prettyprint">
+                    
+                > npm install sweetalert2
+
+            </pre>
+
+            <pre class="prettyprint">
+                    
+                import Swal from 'sweetalert2'
+            </pre>
+
+            <pre class="prettyprint">
+                    
+                login() {
+                    console.log( this.myForm.value )
+                    const { email, password } = this.myForm.value
+                    this.authService.login( email, password )
+                      .subscribe({
+                        next: data => console.log({ data }),
+                        error: error => {
+                          Swal.fire({
+                            title: 'Error!',
+                            text: error,
+                            icon: 'error',
+                            confirmButtonText: 'Ok'
+                          })
+                          // console.log({ error })
+                        },
+                      })
+                  }
+            </pre>
+
+            <pre class="prettyprint">
+                    
+                login(email: string, password: string): Observable&ltboolean> {
+
+                    const url = `${ this.baseUrl }/auth/login`
+                    const body = { email, password }
+                
+                    return this.http.post&ltLoginResponse>( url, body )
+                      .pipe(
+                        tap( ({ user, token }) => {
+                          this._currentUser.set( user )
+                          this._authStatus.set( AuthStatus.authenticated )
+                          localStorage.setItem('token', token)
+                          console.log({ user, token })
+                        }),
+                        map( () => true ),
+                        catchError( error => throwError( () =>  error.error.message ))
+                      )
+                  }
+            </pre>
+          </article>
+        </section>
+
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 361 de 404 - Function Guards</h2>
+            <pre class="prettyprint">
+                    
+                > ng g guard auth/guards/isAuthenticated --functional
+            </pre>
+
+            <pre class="prettyprint">
+                    
+                {
+                    path: 'dashboard',
+                    canActivate: [ isAuthenticatedGuard ],
+                    loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule)
+                  },
+            </pre>
+
+            <pre class="prettyprint">
+                    
+                login() {
+                    console.log( this.myForm.value )
+                    const { email, password } = this.myForm.value
+                    this.authService.login( email, password )
+                      .subscribe({
+                        next: data => this.router.navigateByUrl('/dashboard'),
+            </pre>
+
+            <pre class="prettyprint">
+                    
+                export class DashboardLayoutComponent {
+
+                    private authService = inject( AuthService )
+                    public user = computed(() => this.authService.currentUser())
+                  
+                    // get user() {
+                    //   return this.authService.currentUser()
+                    // }
+                  }
+            </pre>
+
+            <pre class="prettyprint">
+                    
+                &lth1>Dashboard&lt/h1>
+                &lthr>
+                
+                &lth3>User&lt/h3>
+                &ltpre>{{ user() | json }}&lt/pre>
+            </pre>
+
+            <pre class="prettyprint">
+                    
+                export const isAuthenticatedGuard: CanActivateFn = (route, state) => {
+                    console.log('isAuthenticatedGuard')
+                    console.log({ route, state })
+                    return true;
+                  };
+                  
+            </pre>
+          </article>
+        </section>
+
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 362 de 404 - Implementar lógica del Functional Guard</h2>
+            <pre class="prettyprint">
+                    
+                export const isAuthenticatedGuard: CanActivateFn = (route, state) => {
+
+                    const authService = inject( AuthService )
+                    const router = inject( Router )
+                  
+                    if ( authService.authStatus() === AuthStatus.authenticated ){
+                      return true
+                    }
+                  
+                    router.navigateByUrl('/auth/login')
+                    return false
+                  };
+            </pre>
+          </article>
+        </section>
+
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 363 de 404 - Servicio para verificar el token de acceso</h2>
+            <pre class="prettyprint">
+                    
+                checkAuthStatus(): Observable&ltboolean> {
+                    const url = `${ this.baseUrl }/auth/check-token`
+                    const token = localStorage.getItem('token')
+                
+                    if (!token) return of(false)
+                
+                    const headers = new HttpHeaders()
+                      .set('Authorization', `Bearer ${ token }`)
+                
+                    return this.http.post&ltCheckTokenResponse>( url, { headers })
+                    .pipe(
+                      map( ({ user, token }) => {
+                        this._currentUser.set( user )
+                        this._authStatus.set( AuthStatus.authenticated )
+                        localStorage.setItem('token', token)
+                        return true
+                      }),
+                      catchError(() => {
+                        this._authStatus.set(AuthStatus.notAuthenticated)
+                        return of(false)
+                      })
+                    )
+                  }
+            </pre>
+          </article>
+        </section>
+
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 364 de 404 - No te repitas a ti mismo - DRY</h2>
+            <pre class="prettyprint">
+                    
+                private setAuthentication(user: User, token: string): boolean {
+                    this._currentUser.set( user )
+                    this._authStatus.set( AuthStatus.authenticated )
+                    localStorage.setItem('token', token)
+                    return true
+                  }
+                
+                  login(email: string, password: string): Observable&ltboolean> {
+                
+                    const url = `${ this.baseUrl }/auth/login`
+                    const body = { email, password }
+                
+                    return this.http.post&ltLoginResponse>( url, body )
+                      .pipe(
+                        map( ({ user, token }) => this.setAuthentication( user, token )),
+                        catchError( error => throwError( () =>  error.error.message ))
+                      )
+                  }
+                
+                  checkAuthStatus(): Observable&ltboolean> {
+                    const url = `${ this.baseUrl }/auth/check-token`
+                    const token = localStorage.getItem('token')
+                
+                    if (!token) return of(false)
+                
+                    const headers = new HttpHeaders()
+                      .set('Authorization', `Bearer ${ token }`)
+                
+                    return this.http.post&ltCheckTokenResponse>( url, { headers })
+                    .pipe(
+                      map( ({ user, token }) => this.setAuthentication( user, token )),
+                      catchError(() => {
+                        this._authStatus.set(AuthStatus.notAuthenticated)
+                        return of(false)
+                      })
+                    )
+                  }
+            </pre>
+          </article>
+        </section>
+
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 365 de 404 - Reaccionar al cambio de autenticacion</h2>
+            <pre class="prettyprint">
+                    
+                export class AppComponent {
+                    private authService = inject(AuthService);
+                    private router = inject(Router);
+                  
+                    public finishedAuthCheck = computed&ltboolean>(() => {
+                      if (this.authService.authStatus() === AuthStatus.checking) {
+                        return false;
+                      }
+                  
+                      return true;
+                    });
+                  
+                    public authStatusChangeEffect = effect(() => {
+                      switch (this.authService.authStatus()) {
+                        case AuthStatus.checking:
+                          return;
+                  
+                        case AuthStatus.authenticated:
+                          this.router.navigateByUrl('/dashboard');
+                          return;
+                  
+                        case AuthStatus.notAuthenticated:
+                          this.router.navigateByUrl('/auth/login');
+                          return;
+                      }
+                    });
+                  }
+            </pre>
+
+            <pre class="prettyprint">
+                    
+                &lth1 *ngIf="!finishedAuthCheck()">Loading&lt/h1>
+
+                &ltrouter-outlet *ngIf="finishedAuthCheck()">&lt/router-outlet>
+            </pre>
+          </article>
+        </section>
+
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 366 de 404 - inNotAuthenticatedGuard</h2>
+            <pre class="prettyprint">
+                    
+                > ng g guard auth/guards/isNotAuthenticated --functional
+            </pre>
+
+            <pre class="prettyprint">
+                    
+                export const isNotAuthenticatedGuard: CanActivateFn = (route, state) => {
+
+                    const authService = inject( AuthService )
+                    const router = inject( Router )
+                
+                    if ( authService.authStatus() === AuthStatus.notAuthenticated ){
+                      return true
+                    }
+                
+                    router.navigateByUrl('/dashboard')
+                    return false
+                };
+            </pre>
+
+            <pre class="prettyprint">
+                    
+                {
+                    path: 'auth',
+                    canActivate: [ isNotAuthenticatedGuard ],
+                    loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
+                  },
+            </pre>
+          </article>
+        </section>
+
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 367 de 404 - Logout</h2>
+            <pre class="prettyprint">
+                    
+                checkAuthStatus():Observable&ltboolean> {
+
+                    ...
+                
+                    if ( !token ) {
+                      this.logout();
+                      return of(false);
+                    }
+                
+                    ...
+                
+                  }
+                
+                  logout() {
+                    localStorage.removeItem('token');
+                    this._currentUser.set(null);
+                    this._authStatus.set( AuthStatus.notAuthenticated );
+                  }
+            </pre>
+          </article>
+        </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <hr>
+        
+        <section class="row">
+          <article class="col">
+            <h2>Sección 368 de 404 - Codigo Fuente de la Sección</h2>
+            <p>
+                <a href="https://github.com/Klerith/angular-nest-auth-app/tree/fin-seccion-26">Frontend</a>
+                - - -
+                <a href="https://github.com/Klerith/angular-nest-backend/tree/fin-seccion-26">Backend</a>
+            </p>
+          </article>
+        </section>
+
 
 
 
@@ -224,6 +706,7 @@
 
 
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
         crossorigin="anonymous"></script>
