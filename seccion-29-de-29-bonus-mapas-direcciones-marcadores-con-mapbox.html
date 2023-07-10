@@ -1,57 +1,323 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+    <title>
+      Sección 29 de 29 - Bonus Mapas Marcadores y Direcciones en Mapbox
+    </title>
+  </head>
 
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
-<title>Sección 29 de 29 - Bonus Mapas Marcadores y Direcciones en Mapbox</title>
-</head>
+  <body>
+    <header class="text-center">
+      <h1>Sección 29 de 29 - Bonus Mapas Marcadores y Direcciones en Mapbox</h1>
+    </header>
+    <main class="container">
+      <hr />
 
-<body>
-<header class="text-center">
-<h1>Sección 29 de 29 - Bonus Mapas Marcadores y Direcciones en Mapbox</h1>
-</header>
-<main class="container">
-    <hr />
-
-    <div class="row">
+      <div class="row">
         <div class="col">
-            <div class="list-group">
-                <a href="./index.html" class="list-group-item list-group-item-action">
-                    Volver
-                </a>
-            </div>
+          <div class="list-group">
+            <a
+              href="./index.html"
+              class="list-group-item list-group-item-action"
+            >
+              Volver
+            </a>
+          </div>
         </div>
-    </div>
+      </div>
 
-    <hr>
-    
-    <section class="row">
-      <article class="col">
-        <h2>Sección 382 de 404 - Temas puntuales de la sección</h2>
-        
-      </article>
-    </section>
+      <hr />
 
-    <hr>
-    
-    <section class="row">
-      <article class="col">
-        <h2>Sección 383 de 404 - Demostracion del objetivo final</h2>
-        
-      </article>
-    </section>
+      <section class="row">
+        <article class="col">
+          <h2>Sección 382 de 404 - Temas puntuales de la sección</h2>
+        </article>
+      </section>
 
-    <hr>
-    
-    <section class="row">
-      <article class="col">
-        <h2>Sección 384 de 404 - Inicio de proyecto - MapasAPP</h2>
-        
-      </article>
-    </section>
+      <hr />
+
+      <section class="row">
+        <article class="col">
+          <h2>Sección 383 de 404 - Demostracion del objetivo final</h2>
+        </article>
+      </section>
+
+      <hr />
+
+      <section class="row">
+        <article class="col">
+          <h2>Sección 384 de 404 - Inicio de proyecto - MapasAPP</h2>
+          <pre class="prettyprint">
+                
+            > ng new mapas-app
+        </pre
+          >
+          <p>sin rutas con bootstrap en el index</p>
+        </article>
+      </section>
+
+      <hr />
+
+      <section class="row">
+        <article class="col">
+          <h2>Sección 385 de 404 - Configuraciones iniciales del proyecto</h2>
+          <pre class="prettyprint">
+                
+            > ng g m maps
+            > ng g c maps/screens/map-screen
+        </pre
+          >
+        </article>
+      </section>
+
+      <hr />
+
+      <section class="row">
+        <article class="col">
+          <h2>Sección 386 de 404 - Obtener la geolocalizacion del usuario</h2>
+          <pre class="prettyprint">
+                
+            if (!navigator.geolocation) {
+                alert('Adios no puedo trbaajr aqui')
+                throw new Error('Adios no puedo trbaajr aqui')
+              }
+        </pre
+          >
+
+          <pre class="prettyprint">
+                
+            > ng g s maps/services/places
+        </pre
+          >
+
+          <pre class="prettyprint">
+                
+            public useLocation?: [number, number]
+
+            get isUserLocationReady(): boolean {
+              return !!this.useLocation;
+            }
+          
+            constructor() {
+              this.getUserLocation();
+            }
+          
+            public async getUserLocation(): Promise<[number, number]> {
+          
+              return new Promise( (resolve, reject ) => {
+          
+                navigator.geolocation.getCurrentPosition(
+                  ({ coords }) => {
+                    this.useLocation = [ coords.longitude, coords.latitude ];
+                    resolve( this.useLocation );
+                  },
+                  ( err ) => {
+                    alert('No se pudo obtener la geolocalización')
+                    console.log(err);
+                    reject();
+                  }
+                );
+          
+          
+              });
+          
+            }
+        </pre
+          >
+        </article>
+      </section>
+
+      <hr />
+
+      <section class="row">
+        <article class="col">
+          <h2>Sección 387 de 404 - Mostrar un mensaje de carga</h2>
+          <pre class="prettyprint">
+                
+            > ng g c maps/components/map-view
+            > ng g c maps/components/loading
+        </pre
+          >
+        </article>
+      </section>
+
+      <hr />
+
+      <section class="row">
+        <article class="col">
+          <h2>Sección 388 de 404 - Mostrar un mapa de mapbox</h2>
+          <pre class="prettyprint">
+                
+            > npm i mapbox-gl
+        </pre
+          >
+
+          <p>Agregar el css al index</p>
+
+          <pre class="prettyprint">
+            
+        > npm i --save-dev @types/mapbox-gl
+    </pre
+          >
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 389 de 404 - Marcadores y Popups</h2>
+          
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 390 de 404 - Boton flotante y logo de angular-maps</h2>
+          <pre class="prettyprint">
+                  
+            > ng g c maps/components/angular-logo
+            > ng g c maps/components/btn-my-location
+        </pre>
+    </article>
+      </section>
+      
+      <hr>
+      
+      <section class="row">
+          <article class="col">
+              <h2>Sección 391 de 404 - Servicio para controlar el mapa</h2>
+              <pre class="prettyprint">
+                  
+                  > ng g s maps/services/map
+                  
+              </pre>
+          
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 392 de 404 - Diseño de componentes de busqueda y detalles</h2>
+          <pre class="prettyprint">
+                  
+            > ng g c maps/components/search-bar
+            > ng g c maps/components/search-results
+          </pre>
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 393 de 404 - Debounce Manual</h2>
+          
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 394 de 404 - Realizar petición Http para obtener lugares</h2>
+          
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 395 de 404 - Custom Http Client - PlacesApiClient</h2>
+          
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 396 de 404 - Mostrar los resultados de la busqueda</h2>
+          
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 397 de 404 - Agregar Marcadores en los lugares encontrados</h2>
+          
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 398 de 404 - Ajustar el mapa para mostrar todos los marcadores encontrados</h2>
+          
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 399 de 404 - Obtener la ruta entre dos puntos</h2>
+          
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 400 de 404 - Obtener la distancia y la duración del recorrido</h2>
+          
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 401 de 404 - Dibujar la polyline</h2>
+          
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 402 de 404 - Ocultar el menu de lugares</h2>
+          
+        </article>
+      </section>
+
+      <hr>
+      
+      <section class="row">
+        <article class="col">
+          <h2>Sección 403 de 404 - Desplegar la aplicacion de mapas</h2>
+          
+        </article>
+      </section>
 
 
 
@@ -63,8 +329,26 @@
 
 
 
-</main>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-</body>
 
+
+
+      <hr />
+
+      <section class="row">
+        <article class="col">
+          <h2>Sección 404 de 404 - Codigo fuente de la seccion</h2>
+          <p>
+            <a href="https://github.com/Klerith/angular-maps"
+              >https://github.com/Klerith/angular-maps</a
+            >
+          </p>
+        </article>
+      </section>
+    </main>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"
+    ></script>
+  </body>
 </html>
